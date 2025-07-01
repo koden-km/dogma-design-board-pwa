@@ -1,4 +1,5 @@
 import Card from "../features/card/Card.tsx";
+import Toolbar from "../features/toolbar/Toolbar.tsx";
 
 export default function BoardPage() {
   return (
@@ -24,6 +25,8 @@ export default function BoardPage() {
           title="A Projection With a Really Long Name For Testing Purposes"
           comment="Some event comment"
         />
+
+        <Toolbar />
       </div>
     </div>
   );
