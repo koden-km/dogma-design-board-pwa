@@ -11,7 +11,14 @@ npm run dev
 
 ## Usage: Run tests
 
+**Once**
+
 ```shell
-npm install
-npm test
+npm run test
+```
+
+**Continuously / Watch**
+
+```shell
+npm run testing
 ```
