@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "classnames": "^2.5.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -25,5 +26,25 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.34.1",
     "vite": "^7.0.0"
+  },
+  "why": {
+    "dependencies": {
+      "classnames": "Used to conditionally add classes",
+      "react": "Added by Vite+React+TypeScript",
+      "react-dom": "Added by Vite+React+TypeScript"
+    },
+    "devDependencies": {
+      "@eslint/js": "Added by Vite+React+TypeScript",
+      "@types/react": "Added by Vite+React+TypeScript",
+      "@types/react-dom": "Added by Vite+React+TypeScript",
+      "@vitejs/plugin-react": "Added by Vite+React+TypeScript",
+      "eslint": "Added by Vite+React+TypeScript",
+      "eslint-plugin-react-hooks": "Added by Vite+React+TypeScript",
+      "eslint-plugin-react-refresh": "Added by Vite+React+TypeScript",
+      "globals": "Added by Vite+React+TypeScript",
+      "typescript": "Added by Vite+React+TypeScript",
+      "typescript-eslint": "Added by Vite+React+TypeScript",
+      "vite": "Added by Vite+React+TypeScript"
+    }
   }
 }

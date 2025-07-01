@@ -1,0 +1,67 @@
+.card {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 8em;
+  aspect-ratio: 1;
+  border: 0.15em solid black;
+  box-shadow: 0 0.75em 0.5em -0.5em #444;
+  position: relative;
+  padding: 0.5em;
+  font-size: 1em;
+  color: black;
+}
+
+.title {
+  flex-grow: 1;
+  font-weight: bold;
+  margin-bottom: 0.2em;
+  overflow: auto;
+}
+
+.comment {
+  max-height: 4em;
+  padding: 0.2em;
+  text-align: left;
+  font-size: 0.6em;
+  background-color: white;
+  border: 0.1em solid black;
+  border-radius: 0.25em;
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.command {
+  background-color: deepskyblue;
+}
+
+.event {
+  background-color: orange;
+}
+
+.aggregate {
+  background-color: khaki;
+}
+
+.integration {
+  background-color: darkcyan;
+}
+
+.process {
+  background-color: darkorchid;
+}
+
+.timeout {
+  background-color: lightgray;
+}
+
+.projection {
+  background-color: saddlebrown;
+}
+
+.view {
+  background-color: greenyellow;
+}
+
+.issue {
+  background-color: firebrick;
+}
