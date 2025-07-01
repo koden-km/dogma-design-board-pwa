@@ -8,3 +8,10 @@ DDD event storming board for Dogmatiq applications.
 npm install
 npm run dev
 ```
+
+## Usage: Run tests
+
+```shell
+npm install
+npm test
+```
