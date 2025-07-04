@@ -1,10 +1,11 @@
+import Board from "../features/board/Board.tsx";
 import Card from "../features/card/Card.tsx";
 import Toolbar from "../features/toolbar/Toolbar.tsx";
 
 export default function BoardPage() {
   return (
     <div>
-      <div>Board Page</div>
+      <Board />
 
       <div>
         <Card type="event" comment="Some event comment" />

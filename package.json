@@ -13,9 +13,12 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
     "classnames": "^2.5.1",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
@@ -36,9 +39,12 @@
   },
   "why": {
     "dependencies": {
+      "@reduxjs/toolkit": "Used for state management",
       "classnames": "Used to conditionally add classes",
       "react": "Added by Vite+React+TypeScript",
-      "react-dom": "Added by Vite+React+TypeScript"
+      "react-dom": "Added by Vite+React+TypeScript",
+      "react-redux": "Used to connect UI components to Redux state",
+      "uuid": "Used to generate unique IDs"
     },
     "devDependencies": {
       "@eslint/js": "Added by Vite+React+TypeScript",

@@ -2,6 +2,7 @@ import classnames from "classnames";
 import styles from "../Toolbar.module.css";
 import type { ToolType } from "../types.ts";
 import cardStyles from "../../card/Card.module.css";
+import { useIsCurrentTool, useSwitchTool } from "../../board/hooks.ts";
 
 interface ToolButtonProps {
   children?: React.ReactNode;
@@ -11,12 +12,8 @@ interface ToolButtonProps {
 
 export default function ToolButton(props: ToolButtonProps) {
   const { children, isCard, tool } = props;
-
-  const selectTool = () => {
-    console.log("select tool:", tool);
-  };
-
-  const isCurrentTool = false;
+  const switchTool = useSwitchTool(tool);
+  const isCurrentTool = useIsCurrentTool(tool);
 
   const className = classnames(styles.toolButton, {
     [styles.currentTool]: isCurrentTool,
@@ -25,7 +22,7 @@ export default function ToolButton(props: ToolButtonProps) {
   });
 
   return (
-    <button type="button" className={className} onClick={selectTool}>
+    <button type="button" className={className} onClick={switchTool}>
       {tool.toUpperCase()}
       {children}
     </button>
