@@ -23,7 +23,7 @@ export default function ToolButton(props: ToolButtonProps) {
 
   return (
     <button type="button" className={className} onClick={switchTool}>
-      {tool.toUpperCase()}
+      {!children && tool.toUpperCase()}
       {children}
     </button>
   );
