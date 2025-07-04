@@ -1,5 +1,6 @@
 {
   "name": "dogma-design-board-pwa",
+  "description": "Dogma Design Board - PWA using Vite + React + TS",
   "private": true,
   "version": "0.0.0",
   "type": "module",
