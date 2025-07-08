@@ -14,18 +14,15 @@ import ViewTool from "./components/ViewTool.js";
 
 export default function Toolbar() {
   const [isVisible, setIsVisible] = useState(false);
+
   const handleClick = useCallback(() => {
     setIsVisible(!isVisible);
   }, [isVisible]);
 
   return (
     <div className={styles.toolbar}>
-      <button
-        type="button"
-        className={styles.toggleButton}
-        onClick={handleClick}
-      >
-        {isVisible ? "<<" : ">>"}
+      <button type="button" className={styles.toolButton} onClick={handleClick}>
+        {isVisible ? "<<" : "Tools >>"}
       </button>
 
       {isVisible && (

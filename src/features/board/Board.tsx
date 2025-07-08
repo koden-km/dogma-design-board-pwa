@@ -1,13 +1,16 @@
-import { useComment, useTitle } from "./hooks";
+import { useCurrentDomain } from "./hooks.ts";
+import DomainBoard from "./components/DomainBoard.tsx";
+import DomainList from "./components/DomainList.tsx";
+import Toolbar from "../toolbar/Toolbar.tsx";
 
 export default function Board() {
-  const title = useTitle();
-  const comment = useComment();
+  const currentDomain = useCurrentDomain();
 
   return (
     <div>
-      <h1>{title}</h1>
-      {comment && <p>{comment}</p>}
+      <DomainList />
+      <DomainBoard domain={currentDomain} />
+      <Toolbar />
     </div>
   );
 }

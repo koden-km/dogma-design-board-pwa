@@ -1,0 +1,27 @@
+.domainList {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border: 0.2em solid black;
+  padding: 0.5em;
+  background-color: gray;
+}
+
+.domainListButton {
+  width: 15em;
+  height: 4em;
+  border: 0.2em solid black;
+  border-radius: 0.5em;
+  font-size: xx-small;
+  font-weight: bold;
+  color: black;
+}
+
+.isDomain {
+  background-color: white;
+}
+
+.currentDomain {
+  border: 0.4em dotted black;
+  color: blue;
+}
