@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks.js";
 import { type ToolType } from "../toolbar/types.ts";
-import { switchDomain, switchTool, type BoardState } from "./slice.ts";
+import slice, { switchDomain, switchTool, type BoardState } from "./slice.ts";
 import type { Id } from "./types.ts";
 
 export const useCurrentDomainId = () => useSelector().currentDomainId;
@@ -41,5 +41,5 @@ export const useSwitchTool = (tool: ToolType) => {
 };
 
 function useSelector(): BoardState {
-  return useAppSelector((state) => state.board);
+  return useAppSelector((state) => state[slice.name]);
 }
