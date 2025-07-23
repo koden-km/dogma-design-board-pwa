@@ -14,7 +14,7 @@ export default function Card(props: CardProps) {
   return (
     <div className={classnames(styles.card, styles[type])}>
       <div className={styles.title}>{title}</div>
-      {comment && <div className={styles.comment}>{comment}</div>}
+      {comment && <p className={styles.comment}>{comment}</p>}
     </div>
   );
 }

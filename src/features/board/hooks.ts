@@ -8,6 +8,9 @@ export const useCurrentDomainId = () => useSelector().currentDomainId;
 export const useCurrentTool = () => useSelector().currentTool;
 export const useDomainWithId = (id: Id) => useSelector().domains[id];
 
+export const useDomainNode = (domainId: Id, nodeId: Id) =>
+  useSelector().domains[domainId].nodesDefinitions[nodeId];
+
 export const useIsCurrentDomain = (domainId: Id) =>
   useSelector().currentDomainId === domainId;
 

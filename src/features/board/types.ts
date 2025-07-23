@@ -1,8 +1,18 @@
 export type Id = string;
 
-// a key-value object map, map<Id,NodeDef>
+// a key-value plain object map, eg. map<Id,NodeDef>
 export type NodeDefMap = {
   [key: Id]: NodeDef;
+};
+
+export type NodeIO = {
+  input?: NodeInst; // message node (command, event, timeout)
+  outputs: NodeInst[]; // message nodes (command, event, timeout)
+};
+
+// a key-value plain object map, eg. map<Id,NodeDef>
+export type NodeIOMap = {
+  [key: Id]: NodeIO;
 };
 
 export type Domain = {
@@ -10,25 +20,14 @@ export type Domain = {
   name: string;
   comment: string;
   issueThreads: { [key: Id]: IssueThread };
-
-  // think vertical list of timelines to represent different things occurring at similar but unrelated time points
-  timelines: Timeline[];
-
-  aggregateNodes: NodeDefMap;
-  commandNodes: NodeDefMap;
-  eventNodes: NodeDefMap;
-  integrationNodes: NodeDefMap;
-  issueNodes: NodeDefMap;
-  processNodes: NodeDefMap;
-  projectionNodes: NodeDefMap;
-  timeoutNodes: NodeDefMap;
-  viewNodes: NodeDefMap;
+  timelines: Timeline[]; // a list of timelines to represent different things occurring at similar but unrelated time points
+  nodesDefinitions: NodeDefMap;
 };
 
 export type IssueThread = {
   id: Id;
   startedTimestamp: number;
-  resolvedTimestamp: number; // non-zero if resolved (consider using optional?)
+  resolvedTimestamp?: number;
   comments: IssueComment[];
 };
 
@@ -41,6 +40,7 @@ export type IssueComment = {
 
 // a list of concepts in one linear timeline
 export type Timeline = {
+  id: Id;
   concepts: Concept[];
 };
 
@@ -49,13 +49,14 @@ export type Concept = {
   id: Id;
   name: string;
   comment: string;
-  timePoints: TimePoint[];
+  timePoints: TimePoint[]; // (think vertical slice of time)
 };
 
 // messages that can occur during a time point and the operator that consumes or produces those messages at that time point
 export type TimePoint = {
-  messageNodes: NodeInst[]; // message nodes (command, event, timeout) in this time point (think vertical time slice)
-  operatorNode: null; // operator nodes (aggregate, process, integration, projection, view)
+  id: Id;
+  operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
+  ioNodes: NodeIOMap; // map of input id (node def Id if known, else placeholder) to a list of node instance outputs
 };
 
 // node definition
@@ -63,14 +64,15 @@ export type NodeDef = {
   domainId: Id;
   id: Id;
   name: string;
-  comment: string; // comment for all instances of this node
   type: NodeType;
 };
 
 // node instance (an instance of a node def)
 export type NodeInst = {
+  domainId: Id;
   nodeId: Id; // node definition id
-  comment: string; // comment specific to this node instance (an addition to node definitions comment)
+  id: Id;
+  comment: string; // comment specific to this node instance
   issueThreadIds: Id[]; // this array allows resolved threads to be hidden but still persist
 };
 

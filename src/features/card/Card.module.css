@@ -16,6 +16,7 @@
   font-weight: bold;
   margin-bottom: 0.2em;
   overflow: auto;
+  text-align: center;
 }
 
 .comment {
@@ -28,6 +29,7 @@
   border-radius: 0.25em;
   box-sizing: border-box;
   overflow: auto;
+  margin-bottom: 0;
 }
 
 .command {

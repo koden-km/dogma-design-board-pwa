@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import { useDomainList } from "../hooks.ts";
+import { useDomainList } from "../board/hooks.ts";
 import styles from "./DomainList.module.css";
-import DomainListButton from "./DomainListButton.tsx";
+import DomainButton from "./components/DomainButton.tsx";
 
 export default function DomainList() {
   const domainList = useDomainList();
@@ -15,7 +15,7 @@ export default function DomainList() {
     <div className={styles.domainList}>
       <button
         type="button"
-        className={styles.domainListButton}
+        className={styles.domainButton}
         onClick={handleClick}
       >
         {isVisible ? "<<" : "Domains >>"}
@@ -23,7 +23,7 @@ export default function DomainList() {
 
       {isVisible &&
         domainList.map((domain) => (
-          <DomainListButton key={domain.id} domain={domain} />
+          <DomainButton key={domain.id} domain={domain} />
         ))}
     </div>
   );
