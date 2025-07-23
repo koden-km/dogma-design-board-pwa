@@ -17,7 +17,6 @@ import {
   createNodeDef,
   createNodeInst,
   createNodeIO,
-  createNodeIOMap,
   createTimeline,
   createTimePoint,
 } from "./util.ts";
@@ -107,7 +106,7 @@ defaultDomain.timelines.push(
             uuidv4(),
             "Custom instance comment"
           ),
-          createNodeIOMap([
+          [
             createNodeIO(
               createNodeInst(defaultDomain.id, someCommand1.id, uuidv4()),
               [
@@ -148,7 +147,7 @@ defaultDomain.timelines.push(
                 ),
               ]
             ),
-          ])
+          ]
         ),
 
         // process example 1 time point
@@ -160,7 +159,7 @@ defaultDomain.timelines.push(
             uuidv4(),
             "Custom instance comment"
           ),
-          createNodeIOMap([
+          [
             createNodeIO(
               createNodeInst(
                 defaultDomain.id,
@@ -177,7 +176,7 @@ defaultDomain.timelines.push(
                 ),
               ]
             ),
-          ])
+          ]
         ),
 
         // process example 2 time point
@@ -189,7 +188,7 @@ defaultDomain.timelines.push(
             uuidv4(),
             "Custom instance comment"
           ),
-          createNodeIOMap([
+          [
             createNodeIO(
               createNodeInst(
                 defaultDomain.id,
@@ -199,7 +198,7 @@ defaultDomain.timelines.push(
               ),
               [createNodeInst(defaultDomain.id, someCommand1.id, uuidv4())]
             ),
-          ])
+          ]
         ),
       ]
     ),

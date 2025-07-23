@@ -7,8 +7,7 @@ import type {
   IssueThread,
   NodeDef,
   NodeDefMap,
-  NodeIO,
-  NodeIOMap,
+  NodeIOGroup,
   NodeInst,
   NodeType,
   TimePoint,
@@ -92,35 +91,20 @@ export function createConcept(
 export function createTimePoint(
   id: Id = uuidv4(),
   operatorNode?: NodeInst,
-  ioNodes: NodeIOMap = {}
+  ioNodeGroups: NodeIOGroup[] = []
 ): TimePoint {
   return {
     id,
     operatorNode,
-    ioNodes,
+    ioNodeGroups,
   };
 }
 
 export function createNodeIO(
   input?: NodeInst,
   outputs: NodeInst[] = []
-): NodeIO {
-  return { input, outputs };
-}
-
-export function createNodeIOMap(ioNodeList: NodeIO[]): NodeIOMap {
-  const ioMap: NodeIOMap = {};
-
-  // There will be no input Id when doing Event Storming because events come first
-  // Group all outputs under the same generated Id
-  const noInputId = uuidv4();
-
-  ioNodeList.forEach((ioNodes) => {
-    const key: Id = ioNodes.input?.nodeId ?? noInputId;
-    ioMap[key] = ioNodes;
-  });
-
-  return ioMap;
+): NodeIOGroup {
+  return { id: uuidv4(), input, outputs };
 }
 
 // node definition

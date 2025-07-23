@@ -5,14 +5,10 @@ export type NodeDefMap = {
   [key: Id]: NodeDef;
 };
 
-export type NodeIO = {
+export type NodeIOGroup = {
+  id: Id; // unique id for the group
   input?: NodeInst; // message node (command, event, timeout)
   outputs: NodeInst[]; // message nodes (command, event, timeout)
-};
-
-// a key-value plain object map, eg. map<Id,NodeDef>
-export type NodeIOMap = {
-  [key: Id]: NodeIO;
 };
 
 export type Domain = {
@@ -56,7 +52,7 @@ export type Concept = {
 export type TimePoint = {
   id: Id;
   operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
-  ioNodes: NodeIOMap; // map of input id (node def Id if known, else placeholder) to a list of node instance outputs
+  ioNodeGroups: NodeIOGroup[]; // list groups that map inputs to a outputs produced by that input
 };
 
 // node definition

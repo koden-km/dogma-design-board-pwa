@@ -11,7 +11,7 @@ export default function TimePoint(props: TimePointProps) {
 
   const {
     operatorNode, // operator node (aggregate, process, integration, projection, view)
-    ioNodes, // groups of input nodes and all the outputs those can produce. message nodes (command, event, timeout) in this time point (think vertical time slice)
+    ioNodeGroups, // groups of input nodes and all the outputs those can produce. message nodes (command, event, timeout) in this time point (think vertical time slice)
   } = timePoint;
 
   return (
@@ -26,11 +26,9 @@ export default function TimePoint(props: TimePointProps) {
         )}
       </div>
 
-      {Object.keys(ioNodes).map((ioKey) => {
-        const { input, outputs } = ioNodes[ioKey];
-        console.log({ input, outputs });
+      {ioNodeGroups.map(({ id, input, outputs }) => {
         return (
-          <FlexLayout key={ioKey} isHorizontal>
+          <FlexLayout key={id} isHorizontal>
             <FlexLayout isVertical>
               {input && <NodeCard nodeInst={input} />}
             </FlexLayout>
