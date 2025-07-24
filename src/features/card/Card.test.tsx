@@ -14,6 +14,13 @@ describe("Card component", () => {
     expect(screen.getByText("COMMAND")).toBeInTheDocument();
   });
 
+  it("should render with a given sub title when provided", () => {
+    render(
+      <Card type="event" title="My Custom Event" subTitle="Some Domain" />
+    );
+    expect(screen.getByText("Some Domain")).toBeInTheDocument();
+  });
+
   it("should render the comment when provided", () => {
     const commentText = "This is a test comment.";
     render(<Card type="process" comment={commentText} />);

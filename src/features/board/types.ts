@@ -16,7 +16,7 @@ export type Domain = {
   name: string;
   comment: string;
   issueThreads: { [key: Id]: IssueThread };
-  timelines: Timeline[]; // a list of timelines to represent different things occurring at similar but unrelated time points
+  timelines: Timeline[]; // a list of concurrent timelines to model things occurring at similar but unrelated time points
   nodesDefinitions: NodeDefMap;
 };
 
@@ -37,22 +37,22 @@ export type IssueComment = {
 // a list of concepts in one linear timeline
 export type Timeline = {
   id: Id;
-  concepts: Concept[];
+  concepts: Concept[]; // linear list of concepts in time
 };
 
-// a grouping system for a bunch of time points on a timeline
+// a group of time points in the timeline that represent a single concept
 export type Concept = {
   id: Id;
   name: string;
   comment: string;
-  timePoints: TimePoint[]; // (think vertical slice of time)
+  timePoints: TimePoint[]; // linear list of points in time
 };
 
 // messages that can occur during a time point and the operator that consumes or produces those messages at that time point
 export type TimePoint = {
   id: Id;
   operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
-  ioNodeGroups: NodeIOGroup[]; // list groups that map inputs to a outputs produced by that input
+  ioNodeGroups: NodeIOGroup[]; // a list of inputs (and corresponding outputs) that can happen during this time point
 };
 
 // node definition
@@ -63,7 +63,7 @@ export type NodeDef = {
   type: NodeType;
 };
 
-// node instance (an instance of a node def)
+// node instance (an instance of a node definition that has comments and issues)
 export type NodeInst = {
   domainId: Id;
   nodeId: Id; // node definition id

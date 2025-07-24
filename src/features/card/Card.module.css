@@ -19,6 +19,15 @@
   text-align: center;
 }
 
+.subTitle {
+  flex-grow: 1;
+  font-style: italic;
+  font-size: 0.5em;
+  /* margin-bottom: 0.2em; */
+  overflow: auto;
+  text-align: center;
+}
+
 .comment {
   max-height: 4em;
   padding: 0.2em;

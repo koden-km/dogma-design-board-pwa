@@ -7,7 +7,7 @@ export interface ConceptProps {
 }
 
 export default function Concept(props: ConceptProps) {
-  const { name = "(unnamed concept)", comment, timePoints } = props.concept;
+  const { name, comment, timePoints } = props.concept;
 
   return (
     <div>

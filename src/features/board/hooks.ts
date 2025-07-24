@@ -6,6 +6,7 @@ import type { Id } from "./types.ts";
 
 export const useCurrentDomainId = () => useSelector().currentDomainId;
 export const useCurrentTool = () => useSelector().currentTool;
+export const useDomainName = (id: Id) => useSelector().domains[id].name;
 export const useDomainWithId = (id: Id) => useSelector().domains[id];
 
 export const useDomainNode = (domainId: Id, nodeId: Id) =>

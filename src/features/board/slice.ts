@@ -8,6 +8,7 @@ import {
   NT_EVENT,
   NT_PROCESS,
   NT_TIMEOUT,
+  NT_VIEW,
   type Domain,
   type Id,
 } from "./types.ts";
@@ -16,7 +17,7 @@ import {
   createDomain,
   createNodeDef,
   createNodeInst,
-  createNodeIO,
+  createNodeIOGroup,
   createTimeline,
   createTimePoint,
 } from "./util.ts";
@@ -46,6 +47,12 @@ const someProcess1 = createNodeDef(
   NT_PROCESS,
   "Some Process 1"
 );
+const someView1 = createNodeDef(
+  defaultDomain.id,
+  uuidv4(),
+  NT_VIEW,
+  "Some View 1"
+);
 const someCommand1 = createNodeDef(
   defaultDomain.id,
   uuidv4(),
@@ -57,6 +64,18 @@ const someCommand2 = createNodeDef(
   uuidv4(),
   NT_COMMAND,
   "Do Something Else"
+);
+const someCommand3 = createNodeDef(
+  defaultDomain.id,
+  uuidv4(),
+  NT_COMMAND,
+  "Do Another Thing"
+);
+const someCommand4 = createNodeDef(
+  defaultDomain.id,
+  uuidv4(),
+  NT_COMMAND,
+  "Cancel Some Thing"
 );
 const someEvent1 = createNodeDef(
   defaultDomain.id,
@@ -84,12 +103,16 @@ const someTimeout1 = createNodeDef(
 );
 defaultDomain.nodesDefinitions[someAggregate1.id] = someAggregate1;
 defaultDomain.nodesDefinitions[someProcess1.id] = someProcess1;
+defaultDomain.nodesDefinitions[someView1.id] = someView1;
 defaultDomain.nodesDefinitions[someCommand1.id] = someCommand1;
 defaultDomain.nodesDefinitions[someCommand2.id] = someCommand2;
+defaultDomain.nodesDefinitions[someCommand3.id] = someCommand3;
+defaultDomain.nodesDefinitions[someCommand4.id] = someCommand4;
 defaultDomain.nodesDefinitions[someEvent1.id] = someEvent1;
 defaultDomain.nodesDefinitions[someEvent2.id] = someEvent2;
 defaultDomain.nodesDefinitions[someEvent3.id] = someEvent3;
 defaultDomain.nodesDefinitions[someTimeout1.id] = someTimeout1;
+defaultDomain.timelines = []; // clear the initial placeholder
 defaultDomain.timelines.push(
   createTimeline(uuidv4(), [
     createConcept(
@@ -97,7 +120,7 @@ defaultDomain.timelines.push(
       "Some example concept",
       "Some concept comment thing if needed",
       [
-        // aggregate example time point
+        // aggregate example 1 time point
         createTimePoint(
           uuidv4(),
           createNodeInst(
@@ -107,7 +130,7 @@ defaultDomain.timelines.push(
             "Custom instance comment"
           ),
           [
-            createNodeIO(
+            createNodeIOGroup(
               createNodeInst(defaultDomain.id, someCommand1.id, uuidv4()),
               [
                 createNodeInst(
@@ -130,7 +153,7 @@ defaultDomain.timelines.push(
                 ),
               ]
             ),
-            createNodeIO(
+            createNodeIOGroup(
               createNodeInst(defaultDomain.id, someCommand2.id, uuidv4()),
               [
                 createNodeInst(
@@ -160,22 +183,43 @@ defaultDomain.timelines.push(
             "Custom instance comment"
           ),
           [
-            createNodeIO(
+            createNodeIOGroup(
               createNodeInst(
                 defaultDomain.id,
                 someEvent1.id,
                 uuidv4(),
-                "This node instance is cool"
+                "Another node instance comment"
               ),
               [
                 createNodeInst(
                   defaultDomain.id,
                   someTimeout1.id,
                   uuidv4(),
-                  "Start timer"
+                  "Scheduled"
                 ),
               ]
             ),
+          ]
+        ),
+
+        // view example 1 time point
+        createTimePoint(
+          uuidv4(),
+          createNodeInst(
+            defaultDomain.id,
+            someView1.id,
+            uuidv4(),
+            "Some user action here"
+          ),
+          [
+            createNodeIOGroup(undefined, [
+              createNodeInst(
+                defaultDomain.id,
+                someCommand3.id,
+                uuidv4(),
+                "User wants to do something"
+              ),
+            ]),
           ]
         ),
 
@@ -189,17 +233,46 @@ defaultDomain.timelines.push(
             "Custom instance comment"
           ),
           [
-            createNodeIO(
+            createNodeIOGroup(
               createNodeInst(
                 defaultDomain.id,
                 someTimeout1.id,
                 uuidv4(),
-                "End timer"
+                "Occurred"
               ),
-              [createNodeInst(defaultDomain.id, someCommand1.id, uuidv4())]
+              [createNodeInst(defaultDomain.id, someCommand4.id, uuidv4())]
             ),
           ]
         ),
+
+        // aggregate example 2 time point
+        createTimePoint(
+          uuidv4(),
+          createNodeInst(
+            defaultDomain.id,
+            someAggregate1.id,
+            uuidv4(),
+            "Custom instance comment"
+          ),
+          [
+            // the user command
+            createNodeIOGroup(
+              createNodeInst(defaultDomain.id, someCommand3.id, uuidv4()),
+              [createNodeInst(defaultDomain.id, someEvent1.id, uuidv4())]
+            ),
+
+            // the timeout cancel command
+            createNodeIOGroup(
+              createNodeInst(defaultDomain.id, someCommand4.id, uuidv4()),
+              [
+                createNodeInst(defaultDomain.id, someEvent2.id, uuidv4()),
+                createNodeInst(defaultDomain.id, someEvent3.id, uuidv4()),
+              ]
+            ),
+          ]
+        ),
+
+        // end examples
       ]
     ),
   ])

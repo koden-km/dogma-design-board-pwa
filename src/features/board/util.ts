@@ -100,7 +100,7 @@ export function createTimePoint(
   };
 }
 
-export function createNodeIO(
+export function createNodeIOGroup(
   input?: NodeInst,
   outputs: NodeInst[] = []
 ): NodeIOGroup {
@@ -134,7 +134,7 @@ export function createNodeInst(
     domainId,
     nodeId, // node definition id
     id,
-    comment, // comment specific to this node instance (an addition to node definitions comment)
+    comment, // comment specific to this node instance
     issueThreadIds, // this array allows resolved threads to be hidden but still persist
   };
 }
