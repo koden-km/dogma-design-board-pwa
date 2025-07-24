@@ -18,6 +18,7 @@ import {
   createNodeDef,
   createNodeInst,
   createNodeIOGroup,
+  createNodeOperatorGroup,
   createTimeline,
   createTimePoint,
 } from "./util.ts";
@@ -46,6 +47,12 @@ const someProcess1 = createNodeDef(
   uuidv4(),
   NT_PROCESS,
   "Some Process 1"
+);
+const someProcess2 = createNodeDef(
+  defaultDomain.id,
+  uuidv4(),
+  NT_PROCESS,
+  "Some Process 2"
 );
 const someView1 = createNodeDef(
   defaultDomain.id,
@@ -95,6 +102,18 @@ const someEvent3 = createNodeDef(
   NT_EVENT,
   "Some Event 3"
 );
+const someEvent4 = createNodeDef(
+  defaultDomain.id,
+  uuidv4(),
+  NT_EVENT,
+  "Some Event 4"
+);
+const someEvent5 = createNodeDef(
+  defaultDomain.id,
+  uuidv4(),
+  NT_EVENT,
+  "Some Event 5"
+);
 const someTimeout1 = createNodeDef(
   defaultDomain.id,
   uuidv4(),
@@ -103,6 +122,7 @@ const someTimeout1 = createNodeDef(
 );
 defaultDomain.nodesDefinitions[someAggregate1.id] = someAggregate1;
 defaultDomain.nodesDefinitions[someProcess1.id] = someProcess1;
+defaultDomain.nodesDefinitions[someProcess2.id] = someProcess2;
 defaultDomain.nodesDefinitions[someView1.id] = someView1;
 defaultDomain.nodesDefinitions[someCommand1.id] = someCommand1;
 defaultDomain.nodesDefinitions[someCommand2.id] = someCommand2;
@@ -111,6 +131,8 @@ defaultDomain.nodesDefinitions[someCommand4.id] = someCommand4;
 defaultDomain.nodesDefinitions[someEvent1.id] = someEvent1;
 defaultDomain.nodesDefinitions[someEvent2.id] = someEvent2;
 defaultDomain.nodesDefinitions[someEvent3.id] = someEvent3;
+defaultDomain.nodesDefinitions[someEvent4.id] = someEvent4;
+defaultDomain.nodesDefinitions[someEvent5.id] = someEvent5;
 defaultDomain.nodesDefinitions[someTimeout1.id] = someTimeout1;
 defaultDomain.timelines = []; // clear the initial placeholder
 defaultDomain.timelines.push(
@@ -121,156 +143,184 @@ defaultDomain.timelines.push(
       "Some concept comment thing if needed",
       [
         // aggregate example 1 time point
-        createTimePoint(
-          uuidv4(),
-          createNodeInst(
-            defaultDomain.id,
-            someAggregate1.id,
+        createTimePoint(uuidv4(), [
+          createNodeOperatorGroup(
             uuidv4(),
-            "Custom instance comment"
+            createNodeInst(
+              defaultDomain.id,
+              someAggregate1.id,
+              uuidv4(),
+              "Custom instance comment"
+            ),
+            [
+              createNodeIOGroup(
+                createNodeInst(defaultDomain.id, someCommand1.id, uuidv4()),
+                [
+                  createNodeInst(
+                    defaultDomain.id,
+                    someEvent1.id,
+                    uuidv4(),
+                    "When something specific happens"
+                  ),
+                  createNodeInst(
+                    defaultDomain.id,
+                    someEvent2.id,
+                    uuidv4(),
+                    "This is another node inst"
+                  ),
+                  createNodeInst(
+                    defaultDomain.id,
+                    someEvent3.id,
+                    uuidv4(),
+                    "node instances all the way down"
+                  ),
+                ]
+              ),
+              createNodeIOGroup(
+                createNodeInst(defaultDomain.id, someCommand2.id, uuidv4()),
+                [
+                  createNodeInst(
+                    defaultDomain.id,
+                    someEvent4.id,
+                    uuidv4(),
+                    "This is another node inst"
+                  ),
+                  createNodeInst(
+                    defaultDomain.id,
+                    someEvent5.id,
+                    uuidv4(),
+                    "node instances all the way down"
+                  ),
+                ]
+              ),
+            ]
           ),
-          [
-            createNodeIOGroup(
-              createNodeInst(defaultDomain.id, someCommand1.id, uuidv4()),
-              [
+        ]),
+
+        // process example 1 time point
+        createTimePoint(uuidv4(), [
+          // operator group 1
+          createNodeOperatorGroup(
+            uuidv4(),
+            createNodeInst(
+              defaultDomain.id,
+              someProcess1.id,
+              uuidv4(),
+              "Custom instance comment"
+            ),
+            [
+              createNodeIOGroup(
                 createNodeInst(
                   defaultDomain.id,
                   someEvent1.id,
                   uuidv4(),
-                  "When something specific happens"
+                  "Another node instance comment"
                 ),
-                createNodeInst(
-                  defaultDomain.id,
-                  someEvent2.id,
-                  uuidv4(),
-                  "This is another node inst"
-                ),
-                createNodeInst(
-                  defaultDomain.id,
-                  someEvent3.id,
-                  uuidv4(),
-                  "node instances all the way down"
-                ),
-              ]
-            ),
-            createNodeIOGroup(
-              createNodeInst(defaultDomain.id, someCommand2.id, uuidv4()),
-              [
-                createNodeInst(
-                  defaultDomain.id,
-                  someEvent2.id,
-                  uuidv4(),
-                  "This is another node inst"
-                ),
-                createNodeInst(
-                  defaultDomain.id,
-                  someEvent3.id,
-                  uuidv4(),
-                  "node instances all the way down"
-                ),
-              ]
-            ),
-          ]
-        ),
-
-        // process example 1 time point
-        createTimePoint(
-          uuidv4(),
-          createNodeInst(
-            defaultDomain.id,
-            someProcess1.id,
-            uuidv4(),
-            "Custom instance comment"
-          ),
-          [
-            createNodeIOGroup(
-              createNodeInst(
-                defaultDomain.id,
-                someEvent1.id,
-                uuidv4(),
-                "Another node instance comment"
+                [
+                  createNodeInst(
+                    defaultDomain.id,
+                    someTimeout1.id,
+                    uuidv4(),
+                    "Scheduled"
+                  ),
+                ]
               ),
-              [
+            ]
+          ),
+
+          // operator group 2
+          createNodeOperatorGroup(
+            uuidv4(),
+            createNodeInst(
+              defaultDomain.id,
+              someProcess2.id,
+              uuidv4(),
+              "Some other process will handle a different event at this time point"
+            ),
+            [
+              createNodeIOGroup(
+                createNodeInst(defaultDomain.id, someEvent4.id, uuidv4()),
+                [createNodeInst(defaultDomain.id, someCommand4.id, uuidv4())]
+              ),
+            ]
+          ),
+        ]),
+
+        // view example 1 time point
+        createTimePoint(uuidv4(), [
+          createNodeOperatorGroup(
+            uuidv4(),
+            createNodeInst(
+              defaultDomain.id,
+              someView1.id,
+              uuidv4(),
+              "Some user action here"
+            ),
+            [
+              createNodeIOGroup(undefined, [
+                createNodeInst(
+                  defaultDomain.id,
+                  someCommand3.id,
+                  uuidv4(),
+                  "User wants to do something"
+                ),
+              ]),
+            ]
+          ),
+        ]),
+
+        // process example 2 time point
+        createTimePoint(uuidv4(), [
+          createNodeOperatorGroup(
+            uuidv4(),
+            createNodeInst(
+              defaultDomain.id,
+              someProcess1.id,
+              uuidv4(),
+              "Custom instance comment"
+            ),
+            [
+              createNodeIOGroup(
                 createNodeInst(
                   defaultDomain.id,
                   someTimeout1.id,
                   uuidv4(),
-                  "Scheduled"
+                  "Occurred"
                 ),
-              ]
-            ),
-          ]
-        ),
-
-        // view example 1 time point
-        createTimePoint(
-          uuidv4(),
-          createNodeInst(
-            defaultDomain.id,
-            someView1.id,
-            uuidv4(),
-            "Some user action here"
-          ),
-          [
-            createNodeIOGroup(undefined, [
-              createNodeInst(
-                defaultDomain.id,
-                someCommand3.id,
-                uuidv4(),
-                "User wants to do something"
+                [createNodeInst(defaultDomain.id, someCommand4.id, uuidv4())]
               ),
-            ]),
-          ]
-        ),
-
-        // process example 2 time point
-        createTimePoint(
-          uuidv4(),
-          createNodeInst(
-            defaultDomain.id,
-            someProcess1.id,
-            uuidv4(),
-            "Custom instance comment"
+            ]
           ),
-          [
-            createNodeIOGroup(
-              createNodeInst(
-                defaultDomain.id,
-                someTimeout1.id,
-                uuidv4(),
-                "Occurred"
-              ),
-              [createNodeInst(defaultDomain.id, someCommand4.id, uuidv4())]
-            ),
-          ]
-        ),
+        ]),
 
         // aggregate example 2 time point
-        createTimePoint(
-          uuidv4(),
-          createNodeInst(
-            defaultDomain.id,
-            someAggregate1.id,
+        createTimePoint(uuidv4(), [
+          createNodeOperatorGroup(
             uuidv4(),
-            "Custom instance comment"
-          ),
-          [
-            // the user command
-            createNodeIOGroup(
-              createNodeInst(defaultDomain.id, someCommand3.id, uuidv4()),
-              [createNodeInst(defaultDomain.id, someEvent1.id, uuidv4())]
+            createNodeInst(
+              defaultDomain.id,
+              someAggregate1.id,
+              uuidv4(),
+              "Custom instance comment"
             ),
+            [
+              // the user command
+              createNodeIOGroup(
+                createNodeInst(defaultDomain.id, someCommand3.id, uuidv4()),
+                [createNodeInst(defaultDomain.id, someEvent1.id, uuidv4())]
+              ),
 
-            // the timeout cancel command
-            createNodeIOGroup(
-              createNodeInst(defaultDomain.id, someCommand4.id, uuidv4()),
-              [
-                createNodeInst(defaultDomain.id, someEvent2.id, uuidv4()),
-                createNodeInst(defaultDomain.id, someEvent3.id, uuidv4()),
-              ]
-            ),
-          ]
-        ),
+              // the timeout cancel command
+              createNodeIOGroup(
+                createNodeInst(defaultDomain.id, someCommand4.id, uuidv4()),
+                [
+                  createNodeInst(defaultDomain.id, someEvent2.id, uuidv4()),
+                  createNodeInst(defaultDomain.id, someEvent3.id, uuidv4()),
+                ]
+              ),
+            ]
+          ),
+        ]),
 
         // end examples
       ]

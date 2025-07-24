@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach, type Mock } from "vitest";
-import * as boardHooks from "@/features/board/hooks";
+import * as boardHooks from "@/features/board/hooks.ts";
 import cardStyles from "@/features/card/Card.module.css";
 import ToolButton from "./ToolButton";
 import styles from "../Toolbar.module.css";

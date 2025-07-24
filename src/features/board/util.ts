@@ -9,6 +9,7 @@ import type {
   NodeDefMap,
   NodeIOGroup,
   NodeInst,
+  NodeOperatorGroup,
   NodeType,
   TimePoint,
   Timeline,
@@ -90,13 +91,11 @@ export function createConcept(
 // messages that can occur during a time point and the operator that consumes or produces those messages at that time point
 export function createTimePoint(
   id: Id = uuidv4(),
-  operatorNode?: NodeInst,
-  ioNodeGroups: NodeIOGroup[] = []
+  operatorGroups: NodeOperatorGroup[] = []
 ): TimePoint {
   return {
     id,
-    operatorNode,
-    ioNodeGroups,
+    operatorGroups,
   };
 }
 
@@ -105,6 +104,18 @@ export function createNodeIOGroup(
   outputs: NodeInst[] = []
 ): NodeIOGroup {
   return { id: uuidv4(), input, outputs };
+}
+
+export function createNodeOperatorGroup(
+  id: Id = uuidv4(),
+  operatorNode?: NodeInst,
+  ioNodeGroups: NodeIOGroup[] = []
+): NodeOperatorGroup {
+  return {
+    id,
+    operatorNode,
+    ioNodeGroups,
+  };
 }
 
 // node definition

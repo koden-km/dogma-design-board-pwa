@@ -11,6 +11,12 @@ export type NodeIOGroup = {
   outputs: NodeInst[]; // message nodes (command, event, timeout)
 };
 
+export type NodeOperatorGroup = {
+  id: Id; // unique id for the group
+  operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
+  ioNodeGroups: NodeIOGroup[]; // a list of inputs (and corresponding outputs) that can happen during this time point
+};
+
 export type Domain = {
   id: Id;
   name: string;
@@ -51,8 +57,7 @@ export type Concept = {
 // messages that can occur during a time point and the operator that consumes or produces those messages at that time point
 export type TimePoint = {
   id: Id;
-  operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
-  ioNodeGroups: NodeIOGroup[]; // a list of inputs (and corresponding outputs) that can happen during this time point
+  operatorGroups: NodeOperatorGroup[]; // a list of operator node groups to model concurrent operations during this time point
 };
 
 // node definition
