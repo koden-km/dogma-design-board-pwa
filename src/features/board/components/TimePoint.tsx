@@ -1,4 +1,4 @@
-import FlexLayout from "../../../components/FlexLayout.tsx";
+import FlexLayout from "@/components/FlexLayout.tsx";
 import type { TimePoint } from "../types.ts";
 import NodeCard from "./NodeCard.tsx";
 

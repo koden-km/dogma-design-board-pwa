@@ -1,4 +1,4 @@
-import Board from "../features/board/Board.tsx";
+import Board from "@/features/board/Board.tsx";
 
 export default function BoardPage() {
   return (

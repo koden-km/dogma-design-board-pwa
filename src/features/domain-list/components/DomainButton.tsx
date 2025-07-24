@@ -1,6 +1,6 @@
 import classnames from "classnames";
-import type { Domain } from "../../board/types.ts";
-import { useIsCurrentDomain, useSwitchDomain } from "../../board/hooks.ts";
+import type { Domain } from "@/features/board/types.ts";
+import { useIsCurrentDomain, useSwitchDomain } from "@/features/board/hooks.ts";
 import styles from "../DomainList.module.css";
 
 interface DomainButtonProps {

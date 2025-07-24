@@ -24,6 +24,7 @@
     "@eslint/js": "^9.29.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
+    "@types/node": "^24.1.0",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.2",
@@ -48,6 +49,9 @@
     },
     "devDependencies": {
       "@eslint/js": "Added by Vite+React+TypeScript",
+      "@testing-library/jest-dom": "Added for testing react components with Vitest",
+      "@testing-library/react": "Added for testing react components with Vitest",
+      "@types/node": "Added for Vite config to use node path and __dirname",
       "@types/react": "Added by Vite+React+TypeScript",
       "@types/react-dom": "Added by Vite+React+TypeScript",
       "@vitejs/plugin-react": "Added by Vite+React+TypeScript",
@@ -55,9 +59,11 @@
       "eslint-plugin-react-hooks": "Added by Vite+React+TypeScript",
       "eslint-plugin-react-refresh": "Added by Vite+React+TypeScript",
       "globals": "Added by Vite+React+TypeScript",
+      "jest-dom": "Added for testing react components with Vitest",
       "typescript": "Added by Vite+React+TypeScript",
       "typescript-eslint": "Added by Vite+React+TypeScript",
-      "vite": "Added by Vite+React+TypeScript"
+      "vite": "Added by Vite+React+TypeScript",
+      "vitest": "Added for unit testing"
     }
   }
 }

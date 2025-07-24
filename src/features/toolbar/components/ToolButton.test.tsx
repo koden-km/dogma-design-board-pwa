@@ -1,12 +1,12 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach, type Mock } from "vitest";
+import * as boardHooks from "@/features/board/hooks";
+import cardStyles from "@/features/card/Card.module.css";
 import ToolButton from "./ToolButton";
-import * as boardHooks from "../../board/hooks";
-import cardStyles from "../../card/Card.module.css";
 import styles from "../Toolbar.module.css";
 
 // Mock the hooks module
-vi.mock("../../board/hooks");
+vi.mock("@/features/board/hooks");
 
 const useSwitchToolMock = boardHooks.useSwitchTool as Mock;
 const useIsCurrentToolMock = boardHooks.useIsCurrentTool as Mock;

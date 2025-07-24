@@ -1,8 +1,8 @@
 import classnames from "classnames";
+import { useIsCurrentTool, useSwitchTool } from "@/features/board/hooks.ts";
+import cardStyles from "@/features/card/Card.module.css";
 import styles from "../Toolbar.module.css";
 import type { ToolType } from "../types.ts";
-import cardStyles from "../../card/Card.module.css";
-import { useIsCurrentTool, useSwitchTool } from "../../board/hooks.ts";
 
 interface ToolButtonProps {
   children?: React.ReactNode;

@@ -1,6 +1,6 @@
+import Card from "@/features/card/Card.tsx";
 import type { NodeInst } from "../types.ts";
 import { useCurrentDomain, useDomainName, useDomainNode } from "../hooks.ts";
-import Card from "../../card/Card.tsx";
 
 export interface NodeCardProps {
   nodeInst: NodeInst;

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
-import { useAppSelector, useAppDispatch } from "../../store/hooks.js";
-import { type ToolType } from "../toolbar/types.ts";
+import { useAppSelector, useAppDispatch } from "@/store/hooks.js";
+import { type ToolType } from "@/features/toolbar/types.ts";
 import slice, { switchDomain, switchTool, type BoardState } from "./slice.ts";
 import type { Id } from "./types.ts";
 

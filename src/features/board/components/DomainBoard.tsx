@@ -1,4 +1,4 @@
-import FlexLayout from "../../../components/FlexLayout.tsx";
+import FlexLayout from "@/components/FlexLayout.tsx";
 import type { Domain } from "../types.ts";
 import Timeline from "./Timeline.tsx";
 

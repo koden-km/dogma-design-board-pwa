@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
-import { TT_POINTER, type ToolType } from "../toolbar/types.ts";
+import { TT_POINTER, type ToolType } from "@/features/toolbar/types.ts";
 import {
   NT_AGGREGATE,
   NT_COMMAND,

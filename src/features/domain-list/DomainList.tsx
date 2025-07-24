@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { useDomainList } from "../board/hooks.ts";
+import { useDomainList } from "@/features/board/hooks.ts";
 import styles from "./DomainList.module.css";
 import DomainButton from "./components/DomainButton.tsx";
 

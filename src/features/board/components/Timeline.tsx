@@ -1,4 +1,4 @@
-import FlexLayout from "../../../components/FlexLayout.tsx";
+import FlexLayout from "@/components/FlexLayout.tsx";
 import type { Timeline } from "../types.ts";
 import Concept from "./Concept.tsx";
 
