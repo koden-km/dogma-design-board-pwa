@@ -71,10 +71,47 @@ export type NodeDef = {
 // node instance (an instance of a node definition that has comments and issues)
 export type NodeInst = {
   domainId: Id;
-  nodeId: Id; // node definition id
-  id: Id;
+  defId: Id; // node definition id
+  id: Id; // node instance id
   comment: string; // comment specific to this node instance
   issueThreadIds: Id[]; // this array allows resolved threads to be hidden but still persist
+};
+
+export type DragAndDropNodeInst = {
+  domainId: Id;
+  defId: Id;
+  instId: Id;
+  type: NodeType;
+};
+
+export type DragAndDropNodeOperatorGroup = {
+  domainId: Id;
+  timePointId: Id;
+};
+
+export type DragAndDropNodeIOGroup = {
+  domainId: Id;
+  timePointId: Id;
+};
+
+export type DragAndDropTimePoint = {
+  domainId: Id;
+  timePointId: Id;
+};
+
+export type DragAndDropConcept = {
+  domainId: Id;
+  conceptId: Id;
+};
+
+export type DragAndDropTimeline = {
+  domainId: Id;
+  timelineId: Id;
+};
+
+export type DragAndDropElement = {
+  type: DragAndDropType;
+  payload: DragAndDropPayload;
 };
 
 // node types
@@ -110,3 +147,30 @@ export type OperatorType =
   | typeof NT_PROCESS
   | typeof NT_PROJECTION
   | typeof NT_VIEW;
+
+// drag and drop data format
+export const DD_DATA_FORMAT = "application/json";
+
+// drag and drop types
+export const DDT_NODE = "node";
+export const DDT_OP_GROUP = "op-group";
+export const DDT_IO_GROUP = "io-group";
+export const DDT_TIME_POINT = "time-point";
+export const DDT_CONCEPT = "concept";
+export const DDT_TIMELINE = "timeline";
+
+export type DragAndDropType =
+  | typeof DDT_NODE
+  | typeof DDT_OP_GROUP
+  | typeof DDT_IO_GROUP
+  | typeof DDT_TIME_POINT
+  | typeof DDT_CONCEPT
+  | typeof DDT_TIMELINE;
+
+export type DragAndDropPayload =
+  | DragAndDropNodeInst
+  | DragAndDropNodeOperatorGroup
+  | DragAndDropNodeIOGroup
+  | DragAndDropTimePoint
+  | DragAndDropConcept
+  | DragAndDropTimeline;

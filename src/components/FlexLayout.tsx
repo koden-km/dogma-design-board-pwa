@@ -16,10 +16,14 @@ export default function FlexLayout(props: FlexLayoutProps) {
     isVertical = false,
   } = props;
 
-  const classNames = classnames(styles.container, className, {
+  const classNames = classnames(styles.flexLayout, className, {
     [styles.horizontal]: isHorizontal,
     [styles.vertical]: isVertical,
   });
 
-  return <div className={classNames}>{children}</div>;
+  return (
+    <div className={classNames} draggable>
+      {children}
+    </div>
+  );
 }

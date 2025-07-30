@@ -1,0 +1,36 @@
+.header {
+  margin-bottom: 1em;
+}
+
+.timeline {
+  background-color: #c0c0c0;
+  padding: 1em;
+}
+
+.concept {
+  background-color: #a0a0a0;
+  padding: 1em;
+}
+
+.timePoint {
+  background-color: #808080;
+  padding: 1em;
+  margin: 1em;
+}
+
+.conceptComment {
+  font-size: small;
+}
+
+.addNew {
+  border: thin dotted white;
+}
+
+.selectable {
+  background: transparent;
+  border: medium solid transparent;
+}
+
+.selectableIsSelected {
+  border: medium dashed magenta;
+}

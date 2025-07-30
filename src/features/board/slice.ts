@@ -27,9 +27,10 @@ export interface BoardState {
   currentDomainId: Id;
   currentTool: ToolType;
   domains: { [key: Id]: Domain };
+  selectedId: Id;
 }
 
-const defaultDomain = createDomain(uuidv4(), "Event Storm");
+const defaultDomain = createDomain(uuidv4(), "New Domain");
 
 //////////////////
 // DEBUG ONLY: fill out some domain data
@@ -134,7 +135,7 @@ defaultDomain.nodesDefinitions[someEvent3.id] = someEvent3;
 defaultDomain.nodesDefinitions[someEvent4.id] = someEvent4;
 defaultDomain.nodesDefinitions[someEvent5.id] = someEvent5;
 defaultDomain.nodesDefinitions[someTimeout1.id] = someTimeout1;
-defaultDomain.timelines = []; // clear the initial placeholder
+// defaultDomain.timelines = []; // clear the initial placeholder?
 defaultDomain.timelines.push(
   createTimeline(uuidv4(), [
     createConcept(
@@ -154,6 +155,7 @@ defaultDomain.timelines.push(
             ),
             [
               createNodeIOGroup(
+                uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand1.id, uuidv4()),
                 [
                   createNodeInst(
@@ -177,6 +179,7 @@ defaultDomain.timelines.push(
                 ]
               ),
               createNodeIOGroup(
+                uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand2.id, uuidv4()),
                 [
                   createNodeInst(
@@ -210,6 +213,7 @@ defaultDomain.timelines.push(
             ),
             [
               createNodeIOGroup(
+                uuidv4(),
                 createNodeInst(
                   defaultDomain.id,
                   someEvent1.id,
@@ -239,6 +243,7 @@ defaultDomain.timelines.push(
             ),
             [
               createNodeIOGroup(
+                uuidv4(),
                 createNodeInst(defaultDomain.id, someEvent4.id, uuidv4()),
                 [createNodeInst(defaultDomain.id, someCommand4.id, uuidv4())]
               ),
@@ -257,7 +262,7 @@ defaultDomain.timelines.push(
               "Some user action here"
             ),
             [
-              createNodeIOGroup(undefined, [
+              createNodeIOGroup(uuidv4(), undefined, [
                 createNodeInst(
                   defaultDomain.id,
                   someCommand3.id,
@@ -281,6 +286,7 @@ defaultDomain.timelines.push(
             ),
             [
               createNodeIOGroup(
+                uuidv4(),
                 createNodeInst(
                   defaultDomain.id,
                   someTimeout1.id,
@@ -306,12 +312,14 @@ defaultDomain.timelines.push(
             [
               // the user command
               createNodeIOGroup(
+                uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand3.id, uuidv4()),
                 [createNodeInst(defaultDomain.id, someEvent1.id, uuidv4())]
               ),
 
               // the timeout cancel command
               createNodeIOGroup(
+                uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand4.id, uuidv4()),
                 [
                   createNodeInst(defaultDomain.id, someEvent2.id, uuidv4()),
@@ -339,12 +347,18 @@ const initialState: BoardState = {
     [debugFooDomain.id]: debugFooDomain, // DEBUG ONLY
     [debugBarDomain.id]: debugBarDomain, // DEBUG ONLY
   },
+  selectedId: "",
 };
 
 const slice = createSlice({
   name: "board",
   initialState,
   reducers: {
+    selectId: (state, action: PayloadAction<{ id: Id }>) => {
+      const { payload } = action;
+      state.selectedId = payload.id;
+    },
+
     switchTool: (state, action: PayloadAction<{ tool: ToolType }>) => {
       const { payload } = action;
       state.currentTool = payload.tool;
@@ -397,5 +411,5 @@ const slice = createSlice({
   },
 });
 
-export const { switchDomain, switchTool } = slice.actions;
+export const { selectId, switchDomain, switchTool } = slice.actions;
 export default slice;

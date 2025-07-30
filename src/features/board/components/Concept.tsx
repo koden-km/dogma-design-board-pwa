@@ -1,24 +1,42 @@
+import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
 import type { Concept } from "../types.ts";
+import styles from "../Board.module.css";
 import TimePoint from "./TimePoint.tsx";
+import Selectable from "./Selectable.tsx";
 
 export interface ConceptProps {
   concept: Concept;
 }
 
 export default function Concept(props: ConceptProps) {
-  const { name, comment, timePoints } = props.concept;
+  const { id, name, comment, timePoints } = props.concept;
 
   return (
-    <div>
-      <h2>{name}</h2>
-      <p>{comment}</p>
+    <Selectable id={id}>
+      <div className={styles.concept}>
+        <div className={styles.header}>
+          <h2>{name}</h2>
+          <div className={styles.conceptComment}>{comment}</div>
+          <button type="button">Remove Concept</button>
+        </div>
 
-      <FlexLayout isHorizontal>
-        {timePoints.map((timePoint) => (
-          <TimePoint key={timePoint.id} timePoint={timePoint} />
-        ))}
-      </FlexLayout>
-    </div>
+        <FlexLayout isHorizontal>
+          <div className={styles.addNew}>
+            <button type="button">Add Time Point</button>
+          </div>
+
+          {timePoints.map((timePoint) => (
+            <Fragment key={timePoint.id}>
+              <TimePoint timePoint={timePoint} />
+
+              <div className={styles.addNew}>
+                <button type="button">Add Time Point</button>
+              </div>
+            </Fragment>
+          ))}
+        </FlexLayout>
+      </div>
+    </Selectable>
   );
 }

@@ -1,48 +1,39 @@
+import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
 import type { TimePoint } from "../types.ts";
-import NodeCard from "./NodeCard.tsx";
+import styles from "../Board.module.css";
+import OperatorGroup from "./time-point/OperatorGroup.tsx";
+import Selectable from "./Selectable.tsx";
 
 export interface TimePointProps {
   timePoint: TimePoint;
 }
 
 export default function TimePoint(props: TimePointProps) {
-  const { timePoint } = props;
-  const { operatorGroups } = timePoint;
+  const { id, operatorGroups } = props.timePoint;
 
   return (
-    <FlexLayout isVertical>
-      <code>TimePoint:{timePoint.id}</code>
+    <Selectable id={id}>
+      <FlexLayout isVertical className={styles.timePoint}>
+        <div className={styles.header}>
+          {/* <div><code>TimePoint:{id}</code></div> */}
+          <button type="button">Remove Time Point</button>
+        </div>
 
-      {operatorGroups.map(({ id: groupId, operatorNode, ioNodeGroups }) => {
-        return (
-          <FlexLayout key={groupId} isVertical>
-            <div>
-              {operatorNode !== undefined ? (
-                <NodeCard nodeInst={operatorNode} />
-              ) : (
-                "(no operator)"
-              )}
+        <div className={styles.addNew}>
+          <button type="button">Add Operator Group</button>
+        </div>
+
+        {operatorGroups.map((group) => (
+          <Fragment key={group.id}>
+            <OperatorGroup group={group} />
+
+            <div className={styles.addNew}>
+              <button type="button">Add Operator Group</button>
             </div>
-
-            {ioNodeGroups.map(({ id, input, outputs }) => {
-              return (
-                <FlexLayout key={id} isHorizontal>
-                  <FlexLayout isVertical>
-                    {input && <NodeCard nodeInst={input} />}
-                  </FlexLayout>
-
-                  <FlexLayout isVertical>
-                    {Object.values(outputs).map((nodeInst) => (
-                      <NodeCard key={nodeInst.id} nodeInst={nodeInst} />
-                    ))}
-                  </FlexLayout>
-                </FlexLayout>
-              );
-            })}
-          </FlexLayout>
-        );
-      })}
-    </FlexLayout>
+          </Fragment>
+        ))}
+      </FlexLayout>
+    </Selectable>
   );
 }

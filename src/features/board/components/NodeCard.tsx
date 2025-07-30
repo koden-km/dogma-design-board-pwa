@@ -1,19 +1,49 @@
+import { useEffect, useRef } from "react";
 import Card from "@/features/card/Card.tsx";
-import type { NodeInst } from "../types.ts";
-import { useCurrentDomain, useDomainName, useDomainNode } from "../hooks.ts";
+import { DD_DATA_FORMAT, type NodeInst } from "../types.ts";
+import { useCurrentDomain, useDomainName, useDomainNodeDef } from "../hooks.ts";
+import { createDnDNodeInst } from "../util.ts";
+import Selectable from "./Selectable.tsx";
 
 export interface NodeCardProps {
   nodeInst: NodeInst;
 }
 
 export default function NodeCard(props: NodeCardProps) {
-  const { domainId, nodeId, comment } = props.nodeInst;
-  const { name, type } = useDomainNode(domainId, nodeId);
+  const { comment, domainId, defId, id } = props.nodeInst;
+  const { name, type } = useDomainNodeDef(domainId, defId);
   const currentDomain = useCurrentDomain();
   const domainName = useDomainName(domainId);
   const subTitle = currentDomain.name === domainName ? undefined : domainName;
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const elRef = ref.current;
+
+    const dragStartHandler = (e: DragEvent) => {
+      if (e.dataTransfer) {
+        e.dataTransfer.setData(
+          DD_DATA_FORMAT,
+          createDnDNodeInst(domainId, defId, id, type)
+        );
+        e.dataTransfer.effectAllowed = "move";
+      }
+    };
+
+    elRef.addEventListener("dragstart", dragStartHandler);
+
+    return () => {
+      elRef.removeEventListener("dragstart", dragStartHandler);
+    };
+  }, [domainId, defId, id, ref, type]);
 
   return (
-    <Card type={type} title={name} subTitle={subTitle} comment={comment} />
+    <div ref={ref} draggable>
+      <Selectable id={id}>
+        <Card type={type} title={name} subTitle={subTitle} comment={comment} />
+      </Selectable>
+    </div>
   );
 }

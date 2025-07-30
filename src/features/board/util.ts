@@ -1,18 +1,27 @@
 import { v4 as uuidv4 } from "uuid";
-import type {
-  Concept,
-  Domain,
-  Id,
-  IssueComment,
-  IssueThread,
-  NodeDef,
-  NodeDefMap,
-  NodeIOGroup,
-  NodeInst,
-  NodeOperatorGroup,
-  NodeType,
-  TimePoint,
-  Timeline,
+import {
+  DDT_CONCEPT,
+  DDT_IO_GROUP,
+  DDT_NODE,
+  DDT_OP_GROUP,
+  DDT_TIMELINE,
+  DDT_TIME_POINT,
+  type Concept,
+  type Domain,
+  type DragAndDropElement,
+  type DragAndDropPayload,
+  type DragAndDropType,
+  type Id,
+  type IssueComment,
+  type IssueThread,
+  type NodeDef,
+  type NodeDefMap,
+  type NodeIOGroup,
+  type NodeInst,
+  type NodeOperatorGroup,
+  type NodeType,
+  type TimePoint,
+  type Timeline,
 } from "./types.ts";
 
 export function createDomain(
@@ -64,7 +73,20 @@ export function createTimeline(
   concepts: Concept[] = []
 ): Timeline {
   if (concepts.length === 0) {
-    concepts.push(createConcept(uuidv4(), ""));
+    concepts.push(
+      createConcept(
+        uuidv4(),
+        "New Event Storm",
+        "Start by adding the business domain events to the board in a rough time order. They can be moved around as needed.",
+        [
+          createTimePoint(uuidv4(), [
+            createNodeOperatorGroup(uuidv4(), undefined, [
+              createNodeIOGroup(uuidv4()),
+            ]),
+          ]),
+        ]
+      )
+    );
   }
 
   return {
@@ -100,10 +122,11 @@ export function createTimePoint(
 }
 
 export function createNodeIOGroup(
+  id: Id = uuidv4(),
   input?: NodeInst,
   outputs: NodeInst[] = []
 ): NodeIOGroup {
-  return { id: uuidv4(), input, outputs };
+  return { id, input, outputs };
 }
 
 export function createNodeOperatorGroup(
@@ -136,16 +159,59 @@ export function createNodeDef(
 // node instance (an instance of a node def)
 export function createNodeInst(
   domainId: Id,
-  nodeId: Id,
+  defId: Id,
   id: Id,
   comment: string = "",
   issueThreadIds: Id[] = []
 ): NodeInst {
   return {
     domainId,
-    nodeId, // node definition id
+    defId, // node definition id
     id,
     comment, // comment specific to this node instance
     issueThreadIds, // this array allows resolved threads to be hidden but still persist
   };
+}
+
+export function createDnDElement(
+  type: DragAndDropType,
+  payload: DragAndDropPayload
+): string {
+  return JSON.stringify({ type, payload });
+}
+
+export function createDnDNodeInst(
+  domainId: Id,
+  defId: Id,
+  instId: Id,
+  type: NodeType
+): string {
+  return createDnDElement(DDT_NODE, { domainId, defId, instId, type });
+}
+
+export function createDnDNodeOperatorGroup(
+  domainId: Id,
+  timePointId: Id
+): string {
+  return createDnDElement(DDT_OP_GROUP, { domainId, timePointId });
+}
+
+export function createDnDNodeIOGroup(domainId: Id, timePointId: Id): string {
+  return createDnDElement(DDT_IO_GROUP, { domainId, timePointId });
+}
+
+export function createDnDTimePoint(domainId: Id, timePointId: Id): string {
+  return createDnDElement(DDT_TIME_POINT, { domainId, timePointId });
+}
+
+export function createDnDConcept(domainId: Id, conceptId: Id): string {
+  return createDnDElement(DDT_CONCEPT, { domainId, conceptId });
+}
+
+export function createDnDTimeline(domainId: Id, timelineId: Id): string {
+  return createDnDElement(DDT_TIMELINE, { domainId, timelineId });
+}
+
+export function unpackDnDElement(jsonData: string): DragAndDropElement {
+  return JSON.parse(jsonData);
 }

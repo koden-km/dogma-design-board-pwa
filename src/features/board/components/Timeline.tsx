@@ -1,19 +1,56 @@
+import { useState } from "react";
+import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
 import type { Timeline } from "../types.ts";
+import styles from "../Board.module.css";
 import Concept from "./Concept.tsx";
+import Selectable from "./Selectable.tsx";
 
 export interface TimelineProps {
   timeline: Timeline;
 }
 
 export default function Timeline(props: TimelineProps) {
-  const { timeline } = props;
+  const { id, concepts } = props.timeline;
+  const [isVisible, setIsVisible] = useState(true);
+
+  const handleVisibleToggle = (e: React.PointerEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsVisible(!isVisible);
+  };
 
   return (
-    <FlexLayout isHorizontal>
-      {timeline.concepts.map((concept) => (
-        <Concept key={concept.id} concept={concept} />
-      ))}
-    </FlexLayout>
+    <Selectable id={id}>
+      <FlexLayout isVertical className={styles.timeline}>
+        <div className={styles.header}>
+          {/* <div><code>Timeline:{id}</code></div> */}
+          <FlexLayout isHorizontal>
+            <button type="button" onClick={handleVisibleToggle}>
+              {isVisible ? "Hide Timeline" : "Show Timeline"}
+            </button>
+            {isVisible && <button type="button">Remove Timeline</button>}
+          </FlexLayout>
+        </div>
+
+        {isVisible && (
+          <FlexLayout isHorizontal>
+            <div className={styles.addNew}>
+              <button type="button">Add Concept</button>
+            </div>
+
+            {concepts.map((concept) => (
+              <Fragment key={concept.id}>
+                <Concept concept={concept} />
+
+                <div className={styles.addNew}>
+                  <button type="button">Add Concept</button>
+                </div>
+              </Fragment>
+            ))}
+          </FlexLayout>
+        )}
+      </FlexLayout>
+    </Selectable>
   );
 }
