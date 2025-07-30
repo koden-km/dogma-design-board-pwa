@@ -1,16 +1,13 @@
 import { v4 as uuidv4 } from "uuid";
 import {
-  DDT_CONCEPT,
-  DDT_IO_GROUP,
-  DDT_NODE,
-  DDT_OP_GROUP,
-  DDT_TIMELINE,
-  DDT_TIME_POINT,
   type Concept,
   type Domain,
-  type DragAndDropElement,
-  type DragAndDropPayload,
-  type DragAndDropType,
+  type DragAndDropConcept,
+  type DragAndDropNodeIOGroup,
+  type DragAndDropNodeInst,
+  type DragAndDropNodeOperatorGroup,
+  type DragAndDropTimePoint,
+  type DragAndDropTimeline,
   type Id,
   type IssueComment,
   type IssueThread,
@@ -173,12 +170,9 @@ export function createNodeInst(
   };
 }
 
-export function createDnDElement(
-  type: DragAndDropType,
-  payload: DragAndDropPayload
-): string {
-  return JSON.stringify({ type, payload });
-}
+// drag and drop
+
+// TODO(KM): Rename these to "packDnDXxxx"?
 
 export function createDnDNodeInst(
   domainId: Id,
@@ -186,32 +180,62 @@ export function createDnDNodeInst(
   instId: Id,
   type: NodeType
 ): string {
-  return createDnDElement(DDT_NODE, { domainId, defId, instId, type });
+  // return createDnDElement(DDT_NODE, { domainId, defId, instId, type });
+  return JSON.stringify({ domainId, defId, instId, type });
 }
 
 export function createDnDNodeOperatorGroup(
   domainId: Id,
   timePointId: Id
 ): string {
-  return createDnDElement(DDT_OP_GROUP, { domainId, timePointId });
+  // return createDnDElement(DDT_OP_GROUP, { domainId, timePointId });
+  return JSON.stringify({ domainId, timePointId });
 }
 
 export function createDnDNodeIOGroup(domainId: Id, timePointId: Id): string {
-  return createDnDElement(DDT_IO_GROUP, { domainId, timePointId });
+  // return createDnDElement(DDT_IO_GROUP, { domainId, timePointId });
+  return JSON.stringify({ domainId, timePointId });
 }
 
 export function createDnDTimePoint(domainId: Id, timePointId: Id): string {
-  return createDnDElement(DDT_TIME_POINT, { domainId, timePointId });
+  // return createDnDElement(DDT_TIME_POINT, { domainId, timePointId });
+  return JSON.stringify({ domainId, timePointId });
 }
 
 export function createDnDConcept(domainId: Id, conceptId: Id): string {
-  return createDnDElement(DDT_CONCEPT, { domainId, conceptId });
+  // return createDnDElement(DDT_CONCEPT, { domainId, conceptId });
+  return JSON.stringify({ domainId, conceptId });
 }
 
 export function createDnDTimeline(domainId: Id, timelineId: Id): string {
-  return createDnDElement(DDT_TIMELINE, { domainId, timelineId });
+  // return createDnDElement(DDT_TIMELINE, { domainId, timelineId });
+  return JSON.stringify({ domainId, timelineId });
 }
 
-export function unpackDnDElement(jsonData: string): DragAndDropElement {
+export function unpackDnDNodeInst(jsonData: string): DragAndDropNodeInst {
+  return JSON.parse(jsonData);
+}
+
+export function unpackDnDNodeOperatorGroup(
+  jsonData: string
+): DragAndDropNodeOperatorGroup {
+  return JSON.parse(jsonData);
+}
+
+export function unpackDnDNodeIOGroup(jsonData: string): DragAndDropNodeIOGroup {
+  return JSON.parse(jsonData);
+}
+
+export function unpackDnDNodeIOTimePoint(
+  jsonData: string
+): DragAndDropTimePoint {
+  return JSON.parse(jsonData);
+}
+
+export function unpackDnDNodeIOConcept(jsonData: string): DragAndDropConcept {
+  return JSON.parse(jsonData);
+}
+
+export function unpackDnDNodeIOTimeline(jsonData: string): DragAndDropTimeline {
   return JSON.parse(jsonData);
 }

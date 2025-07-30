@@ -1,9 +1,10 @@
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { NodeInst } from "../../types.ts";
+import type { Id, NodeInst } from "../../types.ts";
 import boardStyles from "../../Board.module.css";
 import NodeCard from "../NodeCard.tsx";
 
 export interface IOGroupInputProps {
+  groupId: Id;
   nodeInst?: NodeInst;
 }
 
@@ -22,7 +23,7 @@ export default function IOGroupInput(props: IOGroupInputProps) {
       )}
 
       {!nodeInst && (
-        <div className={boardStyles.addNew}>
+        <div className={boardStyles.dropArea}>
           <button type="button">Add Operator Input</button>
         </div>
       )}

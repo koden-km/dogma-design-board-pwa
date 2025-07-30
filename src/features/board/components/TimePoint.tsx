@@ -20,7 +20,7 @@ export default function TimePoint(props: TimePointProps) {
           <button type="button">Remove Time Point</button>
         </div>
 
-        <div className={styles.addNew}>
+        <div className={styles.dropArea}>
           <button type="button">Add Operator Group</button>
         </div>
 
@@ -28,7 +28,7 @@ export default function TimePoint(props: TimePointProps) {
           <Fragment key={group.id}>
             <OperatorGroup group={group} />
 
-            <div className={styles.addNew}>
+            <div className={styles.dropArea}>
               <button type="button">Add Operator Group</button>
             </div>
           </Fragment>

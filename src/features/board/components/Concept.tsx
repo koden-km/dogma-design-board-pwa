@@ -22,7 +22,7 @@ export default function Concept(props: ConceptProps) {
         </div>
 
         <FlexLayout isHorizontal>
-          <div className={styles.addNew}>
+          <div className={styles.dropArea}>
             <button type="button">Add Time Point</button>
           </div>
 
@@ -30,7 +30,7 @@ export default function Concept(props: ConceptProps) {
             <Fragment key={timePoint.id}>
               <TimePoint timePoint={timePoint} />
 
-              <div className={styles.addNew}>
+              <div className={styles.dropArea}>
                 <button type="button">Add Time Point</button>
               </div>
             </Fragment>

@@ -22,8 +22,12 @@
   font-size: small;
 }
 
-.addNew {
+.dropArea {
   border: thin dotted white;
+}
+
+.dropAccepted {
+  border: thin dashed limegreen;
 }
 
 .selectable {

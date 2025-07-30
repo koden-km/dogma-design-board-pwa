@@ -15,8 +15,8 @@ export default function IOGroup(props: IOGroupProps) {
   return (
     <Selectable id={id}>
       <FlexLayout isDraggable isHorizontal className={styles.ioGroup}>
-        <IOGroupInput nodeInst={input} />
-        <IOGroupOutputs outputs={outputs} />
+        <IOGroupInput groupId={id} nodeInst={input} />
+        <IOGroupOutputs groupId={id} outputs={outputs} />
       </FlexLayout>
     </Selectable>
   );

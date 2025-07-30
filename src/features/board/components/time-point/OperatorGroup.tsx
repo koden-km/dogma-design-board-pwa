@@ -28,13 +28,13 @@ export default function OperatorGroup(props: OperatorGroupProps) {
           )}
 
           {!operatorNode && (
-            <div className={boardStyles.addNew}>
+            <div className={boardStyles.dropArea}>
               <button type="button">Add Operator</button>
             </div>
           )}
         </div>
 
-        <div className={boardStyles.addNew}>
+        <div className={boardStyles.dropArea}>
           <button type="button">Add Operator IO Group</button>
         </div>
 
@@ -42,7 +42,7 @@ export default function OperatorGroup(props: OperatorGroupProps) {
           <Fragment key={group.id}>
             <IOGroup group={group} />
 
-            <div className={boardStyles.addNew}>
+            <div className={boardStyles.dropArea}>
               <button type="button">Add Operator IO Group</button>
             </div>
           </Fragment>

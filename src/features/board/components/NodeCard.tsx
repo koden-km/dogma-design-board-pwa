@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import Card from "@/features/card/Card.tsx";
-import { DD_DATA_FORMAT, type NodeInst } from "../types.ts";
+import { DDF_NODE_X, type NodeInst } from "../types.ts";
 import { useCurrentDomain, useDomainName, useDomainNodeDef } from "../hooks.ts";
 import { createDnDNodeInst } from "../util.ts";
 import Selectable from "./Selectable.tsx";
@@ -25,7 +25,7 @@ export default function NodeCard(props: NodeCardProps) {
     const dragStartHandler = (e: DragEvent) => {
       if (e.dataTransfer) {
         e.dataTransfer.setData(
-          DD_DATA_FORMAT,
+          DDF_NODE_X,
           createDnDNodeInst(domainId, defId, id, type)
         );
         e.dataTransfer.effectAllowed = "move";

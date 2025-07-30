@@ -77,43 +77,6 @@ export type NodeInst = {
   issueThreadIds: Id[]; // this array allows resolved threads to be hidden but still persist
 };
 
-export type DragAndDropNodeInst = {
-  domainId: Id;
-  defId: Id;
-  instId: Id;
-  type: NodeType;
-};
-
-export type DragAndDropNodeOperatorGroup = {
-  domainId: Id;
-  timePointId: Id;
-};
-
-export type DragAndDropNodeIOGroup = {
-  domainId: Id;
-  timePointId: Id;
-};
-
-export type DragAndDropTimePoint = {
-  domainId: Id;
-  timePointId: Id;
-};
-
-export type DragAndDropConcept = {
-  domainId: Id;
-  conceptId: Id;
-};
-
-export type DragAndDropTimeline = {
-  domainId: Id;
-  timelineId: Id;
-};
-
-export type DragAndDropElement = {
-  type: DragAndDropType;
-  payload: DragAndDropPayload;
-};
-
 // node types
 export const NT_AGGREGATE = "aggregate" as const;
 export const NT_COMMAND = "command" as const;
@@ -148,24 +111,55 @@ export type OperatorType =
   | typeof NT_PROJECTION
   | typeof NT_VIEW;
 
-// drag and drop data format
-export const DD_DATA_FORMAT = "application/json";
-
 // drag and drop types
-export const DDT_NODE = "node";
-export const DDT_OP_GROUP = "op-group";
-export const DDT_IO_GROUP = "io-group";
-export const DDT_TIME_POINT = "time-point";
-export const DDT_CONCEPT = "concept";
-export const DDT_TIMELINE = "timeline";
 
-export type DragAndDropType =
-  | typeof DDT_NODE
-  | typeof DDT_OP_GROUP
-  | typeof DDT_IO_GROUP
-  | typeof DDT_TIME_POINT
-  | typeof DDT_CONCEPT
-  | typeof DDT_TIMELINE;
+export type DragAndDropNodeInst = {
+  domainId: Id;
+  defId: Id;
+  instId: Id;
+  type: NodeType;
+};
+
+export type DragAndDropNodeOperatorGroup = {
+  domainId: Id;
+  timePointId: Id;
+};
+
+export type DragAndDropNodeIOGroup = {
+  domainId: Id;
+  timePointId: Id;
+};
+
+export type DragAndDropTimePoint = {
+  domainId: Id;
+  timePointId: Id;
+};
+
+export type DragAndDropConcept = {
+  domainId: Id;
+  conceptId: Id;
+};
+
+export type DragAndDropTimeline = {
+  domainId: Id;
+  timelineId: Id;
+};
+
+// drag and drop data format types
+export const DDF_NODE_X = "application/board-node-x";
+export const DDF_OP_GROUP = "application/board-op-group";
+export const DDF_IO_GROUP = "application/board-io-group";
+export const DDF_TIME_POINT = "application/board-time-point";
+export const DDF_CONCEPT = "application/board-concept";
+export const DDF_TIMELINE = "application/board-timeline";
+
+export type DragAndDropFormatType =
+  | typeof DDF_NODE_X
+  | typeof DDF_OP_GROUP
+  | typeof DDF_IO_GROUP
+  | typeof DDF_TIME_POINT
+  | typeof DDF_CONCEPT
+  | typeof DDF_TIMELINE;
 
 export type DragAndDropPayload =
   | DragAndDropNodeInst
