@@ -14,7 +14,7 @@ export default function TimePoint(props: TimePointProps) {
 
   return (
     <Selectable id={id}>
-      <FlexLayout isVertical className={styles.timePoint}>
+      <FlexLayout isDraggable isVertical className={styles.timePoint}>
         <div className={styles.header}>
           {/* <div><code>TimePoint:{id}</code></div> */}
           <button type="button">Remove Time Point</button>

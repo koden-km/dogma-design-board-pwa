@@ -4,6 +4,7 @@ import styles from "./FlexLayout.module.css";
 export interface FlexLayoutProps {
   children?: React.ReactNode;
   className?: string;
+  isDraggable?: boolean;
   isHorizontal?: boolean;
   isVertical?: boolean;
 }
@@ -12,6 +13,7 @@ export default function FlexLayout(props: FlexLayoutProps) {
   const {
     children,
     className,
+    isDraggable = false,
     isHorizontal = false,
     isVertical = false,
   } = props;
@@ -22,7 +24,7 @@ export default function FlexLayout(props: FlexLayoutProps) {
   });
 
   return (
-    <div className={classNames} draggable>
+    <div className={classNames} draggable={isDraggable}>
       {children}
     </div>
   );

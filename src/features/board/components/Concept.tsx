@@ -14,7 +14,7 @@ export default function Concept(props: ConceptProps) {
 
   return (
     <Selectable id={id}>
-      <div className={styles.concept}>
+      <div draggable className={styles.concept}>
         <div className={styles.header}>
           <h2>{name}</h2>
           <div className={styles.conceptComment}>{comment}</div>

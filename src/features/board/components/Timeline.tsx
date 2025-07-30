@@ -22,7 +22,7 @@ export default function Timeline(props: TimelineProps) {
 
   return (
     <Selectable id={id}>
-      <FlexLayout isVertical className={styles.timeline}>
+      <FlexLayout isDraggable isVertical className={styles.timeline}>
         <div className={styles.header}>
           {/* <div><code>Timeline:{id}</code></div> */}
           <FlexLayout isHorizontal>

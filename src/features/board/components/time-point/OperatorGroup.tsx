@@ -16,7 +16,7 @@ export default function OperatorGroup(props: OperatorGroupProps) {
 
   return (
     <Selectable id={id}>
-      <FlexLayout isVertical className={styles.operatorGroup}>
+      <FlexLayout isDraggable isVertical className={styles.operatorGroup}>
         <div>
           {operatorNode && (
             <>
@@ -35,7 +35,7 @@ export default function OperatorGroup(props: OperatorGroupProps) {
         </div>
 
         <div className={boardStyles.addNew}>
-          <button type="button">Add IO Group</button>
+          <button type="button">Add Operator IO Group</button>
         </div>
 
         {ioNodeGroups.map((group) => (
@@ -43,7 +43,7 @@ export default function OperatorGroup(props: OperatorGroupProps) {
             <IOGroup group={group} />
 
             <div className={boardStyles.addNew}>
-              <button type="button">Add IO Group</button>
+              <button type="button">Add Operator IO Group</button>
             </div>
           </Fragment>
         ))}
