@@ -1,7 +1,7 @@
 import FlexLayout from "@/components/FlexLayout.tsx";
 import type { Id, NodeInst } from "../../types.ts";
-import boardStyles from "../../Board.module.css";
 import NodeCard from "../NodeCard.tsx";
+import OperatorInputDropArea from "../drop-area/OperatorInputDropArea.tsx";
 
 export interface IOGroupInputProps {
   groupId: Id;
@@ -9,24 +9,12 @@ export interface IOGroupInputProps {
 }
 
 export default function IOGroupInput(props: IOGroupInputProps) {
-  const { nodeInst } = props;
+  const { groupId, nodeInst } = props;
 
   return (
     <FlexLayout isVertical>
-      {nodeInst && (
-        <>
-          {/* <div>
-            <button type="button">Remove Operator Input</button>
-          </div> */}
-          <NodeCard nodeInst={nodeInst} />
-        </>
-      )}
-
-      {!nodeInst && (
-        <div className={boardStyles.dropArea}>
-          <button type="button">Add Operator Input</button>
-        </div>
-      )}
+      {nodeInst && <NodeCard nodeInst={nodeInst} />}
+      {!nodeInst && <OperatorInputDropArea groupId={groupId} />}
     </FlexLayout>
   );
 }

@@ -1,11 +1,12 @@
 import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
 import type { NodeOperatorGroup } from "../../types.ts";
-import boardStyles from "../../Board.module.css";
 import NodeCard from "../NodeCard.tsx";
 import styles from "./TimePoint.module.css";
 import IOGroup from "./IOGroup.tsx";
 import Selectable from "../Selectable.tsx";
+import OperatorDropArea from "../drop-area/OperatorDropArea.tsx";
+import OperatorIOGroupDropArea from "../drop-area/OperatorIOGroupDropArea.tsx";
 
 export interface OperatorGroupProps {
   group: NodeOperatorGroup;
@@ -18,33 +19,16 @@ export default function OperatorGroup(props: OperatorGroupProps) {
     <Selectable id={id}>
       <FlexLayout isDraggable isVertical className={styles.operatorGroup}>
         <div>
-          {operatorNode && (
-            <>
-              {/* <div>
-                <button type="button">Remove Operator</button>
-              </div> */}
-              <NodeCard nodeInst={operatorNode} />
-            </>
-          )}
-
-          {!operatorNode && (
-            <div className={boardStyles.dropArea}>
-              <button type="button">Add Operator</button>
-            </div>
-          )}
+          {operatorNode && <NodeCard nodeInst={operatorNode} />}
+          {!operatorNode && <OperatorDropArea groupId={id} />}
         </div>
 
-        <div className={boardStyles.dropArea}>
-          <button type="button">Add Operator IO Group</button>
-        </div>
+        <OperatorIOGroupDropArea groupId={id} afterId={undefined} />
 
-        {ioNodeGroups.map((group) => (
-          <Fragment key={group.id}>
-            <IOGroup group={group} />
-
-            <div className={boardStyles.dropArea}>
-              <button type="button">Add Operator IO Group</button>
-            </div>
+        {ioNodeGroups.map((ioGroup) => (
+          <Fragment key={ioGroup.id}>
+            <IOGroup group={ioGroup} />
+            <OperatorIOGroupDropArea groupId={id} afterId={ioGroup.id} />
           </Fragment>
         ))}
       </FlexLayout>

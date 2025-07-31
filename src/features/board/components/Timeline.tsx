@@ -5,6 +5,7 @@ import type { Timeline } from "../types.ts";
 import styles from "../Board.module.css";
 import Concept from "./Concept.tsx";
 import Selectable from "./Selectable.tsx";
+import ConceptDropArea from "./drop-area/ConceptDropArea.tsx";
 
 export interface TimelineProps {
   timeline: Timeline;
@@ -29,23 +30,24 @@ export default function Timeline(props: TimelineProps) {
             <button type="button" onClick={handleVisibleToggle}>
               {isVisible ? "Hide Timeline" : "Show Timeline"}
             </button>
-            {isVisible && <button type="button">Remove Timeline</button>}
+
+            {isVisible && (
+              <button type="button" disabled>
+                Remove Timeline
+              </button>
+            )}
           </FlexLayout>
         </div>
 
         {isVisible && (
           <FlexLayout isHorizontal>
-            <div className={styles.dropArea}>
-              <button type="button">Add Concept</button>
-            </div>
+            <ConceptDropArea timelineId={id} afterId={undefined} />
 
             {concepts.map((concept) => (
               <Fragment key={concept.id}>
                 <Concept concept={concept} />
 
-                <div className={styles.dropArea}>
-                  <button type="button">Add Concept</button>
-                </div>
+                <ConceptDropArea timelineId={id} afterId={concept.id} />
               </Fragment>
             ))}
           </FlexLayout>

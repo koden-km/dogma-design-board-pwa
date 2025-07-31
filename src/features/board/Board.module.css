@@ -2,6 +2,10 @@
   margin-bottom: 1em;
 }
 
+.headerComment {
+  font-size: small;
+}
+
 .timeline {
   background-color: #c0c0c0;
   padding: 1em;
@@ -18,16 +22,14 @@
   margin: 1em;
 }
 
-.conceptComment {
-  font-size: small;
-}
-
 .dropArea {
   border: thin dotted white;
+  font-size: small;
 }
 
 .dropAccepted {
   border: thin dashed limegreen;
+  background-color: green;
 }
 
 .selectable {

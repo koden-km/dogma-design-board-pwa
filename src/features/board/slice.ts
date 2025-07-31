@@ -37,6 +37,8 @@ const defaultDomain = createDomain(uuidv4(), "New Domain");
 
 const debugFooDomain = createDomain(uuidv4(), "Foo"); // DEBUG ONLY
 const debugBarDomain = createDomain(uuidv4(), "Bar"); // DEBUG ONLY
+debugFooDomain.comment = "An example of a domain comment.";
+debugBarDomain.comment = "Another example of a domain comment.";
 const someAggregate1 = createNodeDef(
   defaultDomain.id,
   uuidv4(),

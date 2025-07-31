@@ -1,0 +1,8 @@
+.noWrap {
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.noWrap button {
+  pointer-events: auto;
+}
