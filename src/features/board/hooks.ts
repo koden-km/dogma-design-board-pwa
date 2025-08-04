@@ -2,13 +2,32 @@ import { useCallback, useMemo } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks.js";
 import { type ToolType } from "@/features/toolbar/types.ts";
 import slice, {
+  moveConcept,
+  moveIOGroup,
   moveNodeInst,
+  moveOperatorGroup,
+  moveTimeline,
+  moveTimePoint,
   selectId,
   switchDomain,
   switchTool,
   type BoardState,
 } from "./slice.ts";
-import type { DragNodeInstPayload, DropNodeInstPayload, Id } from "./types.ts";
+import type {
+  DragConceptPayload,
+  DragIOGroupPayload,
+  DragNodeInstPayload,
+  DragOperatorGroupPayload,
+  DragTimelinePayload,
+  DragTimePointPayload,
+  DropConceptPayload,
+  DropIOGroupPayload,
+  DropNodeInstPayload,
+  DropOperatorGroupPayload,
+  DropTimelinePayload,
+  DropTimePointPayload,
+  Id,
+} from "./types.ts";
 
 export const useCurrentDomainId = () => useSelector().currentDomainId;
 export const useCurrentTool = () => useSelector().currentTool;
@@ -41,6 +60,56 @@ export const useMoveNodeInst = () => {
   return useCallback(
     (source: DragNodeInstPayload, target: DropNodeInstPayload) => {
       dispatch(moveNodeInst({ source, target }));
+    },
+    [dispatch]
+  );
+};
+
+export const useMoveIOGroup = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (source: DragIOGroupPayload, target: DropIOGroupPayload) => {
+      dispatch(moveIOGroup({ source, target }));
+    },
+    [dispatch]
+  );
+};
+
+export const useMoveOperatorGroup = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (source: DragOperatorGroupPayload, target: DropOperatorGroupPayload) => {
+      dispatch(moveOperatorGroup({ source, target }));
+    },
+    [dispatch]
+  );
+};
+
+export const useMoveTimePoint = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (source: DragTimePointPayload, target: DropTimePointPayload) => {
+      dispatch(moveTimePoint({ source, target }));
+    },
+    [dispatch]
+  );
+};
+
+export const useMoveConcept = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (source: DragConceptPayload, target: DropConceptPayload) => {
+      dispatch(moveConcept({ source, target }));
+    },
+    [dispatch]
+  );
+};
+
+export const useMoveTimeline = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (source: DragTimelinePayload, target: DropTimelinePayload) => {
+      dispatch(moveTimeline({ source, target }));
     },
     [dispatch]
   );

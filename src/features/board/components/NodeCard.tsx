@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback } from "react";
 import Card from "@/features/card/Card.tsx";
 import {
   DDF_NODE_X,
@@ -7,8 +7,9 @@ import {
   type OperatorGroupPath,
 } from "../types.ts";
 import { useCurrentDomain, useDomainName, useDomainNodeDef } from "../hooks.ts";
-import Selectable from "./Selectable.tsx";
 import { packDnDNodeInst } from "../util.ts";
+import Draggable from "./Draggable.tsx";
+import Selectable from "./Selectable.tsx";
 
 export interface NodeCardProps {
   path: OperatorGroupPath | IOGroupPath;
@@ -22,14 +23,9 @@ export default function NodeCard(props: NodeCardProps) {
   const currentDomain = useCurrentDomain();
   const domainName = useDomainName(domainId);
   const subTitle = currentDomain.name === domainName ? undefined : domainName;
-  const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!ref.current) return;
-
-    const elRef = ref.current;
-
-    const dragStartHandler = (e: DragEvent) => {
+  const handleDragStart = useCallback(
+    (e: DragEvent) => {
       if (e.dataTransfer) {
         // force path to be a full IO Group path with an undefined ioGroupId
         e.dataTransfer.setData(
@@ -38,20 +34,15 @@ export default function NodeCard(props: NodeCardProps) {
         );
         e.dataTransfer.effectAllowed = "move";
       }
-    };
-
-    elRef.addEventListener("dragstart", dragStartHandler);
-
-    return () => {
-      elRef.removeEventListener("dragstart", dragStartHandler);
-    };
-  }, [path, id, ref, type]);
+    },
+    [id, path, type]
+  );
 
   return (
-    <div ref={ref} draggable>
+    <Draggable onDragStart={handleDragStart}>
       <Selectable id={id}>
         <Card type={type} title={name} subTitle={subTitle} comment={comment} />
       </Selectable>
-    </div>
+    </Draggable>
   );
 }

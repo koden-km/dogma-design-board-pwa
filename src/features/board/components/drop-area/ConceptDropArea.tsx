@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
-  DDF_OP_GROUP,
-  type DragIOGroupPayload,
+  DDF_CONCEPT,
+  type DragConceptPayload,
   type DragPayload,
+  type DropConceptPayload,
   type Id,
   type TimelinePath,
 } from "../../types.ts";
+import { useMoveConcept } from "../../hooks.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 
@@ -17,18 +19,20 @@ export interface ConceptDropAreaProps {
 
 export default function ConceptDropArea(props: ConceptDropAreaProps) {
   const { path, afterId } = props;
+  const moveConcept = useMoveConcept();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragIOGroupPayload;
-      console.log(
-        `DEBUG(KM): dropHandler() - path=${JSON.stringify(
-          path
-        )} afterId=${afterId}\ndata=`,
-        data
-      );
+      const source = payload as DragConceptPayload;
+
+      const target: DropConceptPayload = {
+        path,
+        afterId,
+      };
+
+      moveConcept(source, target);
     },
-    [path, afterId]
+    [afterId, moveConcept, path]
   );
 
   const addHandler = useCallback(
@@ -41,7 +45,7 @@ export default function ConceptDropArea(props: ConceptDropAreaProps) {
   );
 
   return (
-    <DropArea accepts={DDF_OP_GROUP} onDrop={dropHandler}>
+    <DropArea accepts={DDF_CONCEPT} onDrop={dropHandler}>
       <NoWrap>
         <AddButton onClick={addHandler} /> Concept
       </NoWrap>

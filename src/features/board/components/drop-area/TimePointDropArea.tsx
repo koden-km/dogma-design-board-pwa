@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
-  DDF_OP_GROUP,
+  DDF_TIME_POINT,
   type ConceptPath,
-  type DragIOGroupPayload,
   type DragPayload,
+  type DragTimePointPayload,
+  type DropTimePointPayload,
   type Id,
 } from "../../types.ts";
+import { useMoveTimePoint } from "../../hooks.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 
@@ -17,18 +19,20 @@ export interface TimePointDropAreaProps {
 
 export default function TimePointDropArea(props: TimePointDropAreaProps) {
   const { path, afterId } = props;
+  const moveTimePoint = useMoveTimePoint();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragIOGroupPayload;
-      console.log(
-        `DEBUG(KM): dropHandler() - path=${JSON.stringify(
-          path
-        )} afterId=${afterId}\ndata=`,
-        data
-      );
+      const source = payload as DragTimePointPayload;
+
+      const target: DropTimePointPayload = {
+        path,
+        afterId,
+      };
+
+      moveTimePoint(source, target);
     },
-    [path, afterId]
+    [afterId, moveTimePoint, path]
   );
 
   const addHandler = useCallback(
@@ -41,7 +45,7 @@ export default function TimePointDropArea(props: TimePointDropAreaProps) {
   );
 
   return (
-    <DropArea accepts={DDF_OP_GROUP} onDrop={dropHandler}>
+    <DropArea accepts={DDF_TIME_POINT} onDrop={dropHandler}>
       <NoWrap>
         <AddButton onClick={addHandler} /> Time Point
       </NoWrap>

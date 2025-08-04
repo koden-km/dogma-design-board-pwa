@@ -23,7 +23,7 @@ import {
 export interface DropAreaProps {
   children?: React.ReactNode;
   accepts: DragAndDropFormatType;
-  onDrop: (data: DragPayload) => void;
+  onDrop: (source: DragPayload) => void;
 }
 
 export default function DropArea(props: DropAreaProps) {

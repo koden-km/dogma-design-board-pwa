@@ -1,13 +1,15 @@
 import { useCallback } from "react";
+import NoWrap from "@/components/NoWrap.tsx";
 import {
-  DDF_OP_GROUP,
-  type DragIOGroupPayload,
+  DDF_TIMELINE,
   type DragPayload,
+  type DragTimelinePayload,
+  type DropTimelinePayload,
   type Id,
 } from "../../types.ts";
-import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
-import NoWrap from "@/components/NoWrap.tsx";
+import DropArea from "./DropArea.tsx";
+import { useMoveTimeline } from "../../hooks.ts";
 
 export interface TimelineDropAreaProps {
   domainId: Id;
@@ -16,16 +18,20 @@ export interface TimelineDropAreaProps {
 
 export default function TimelineDropArea(props: TimelineDropAreaProps) {
   const { domainId, afterId } = props;
+  const moveTimeline = useMoveTimeline();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragIOGroupPayload;
-      console.log(
-        `DEBUG(KM): dropHandler() - domainId=${domainId} afterId=${afterId}\ndata=`,
-        data
-      );
+      const source = payload as DragTimelinePayload;
+
+      const target: DropTimelinePayload = {
+        path: { domainId },
+        afterId,
+      };
+
+      moveTimeline(source, target);
     },
-    [domainId, afterId]
+    [afterId, domainId, moveTimeline]
   );
 
   const addHandler = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
@@ -35,7 +41,7 @@ export default function TimelineDropArea(props: TimelineDropAreaProps) {
   }, []);
 
   return (
-    <DropArea accepts={DDF_OP_GROUP} onDrop={dropHandler}>
+    <DropArea accepts={DDF_TIMELINE} onDrop={dropHandler}>
       <NoWrap>
         <AddButton onClick={addHandler} /> Timeline
       </NoWrap>

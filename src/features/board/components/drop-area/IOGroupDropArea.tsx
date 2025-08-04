@@ -4,31 +4,35 @@ import {
   DDF_IO_GROUP,
   type DragIOGroupPayload,
   type DragPayload,
+  type DropIOGroupPayload,
   type Id,
-  type TimePointPath,
+  type OperatorGroupPath,
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
+import { useMoveIOGroup } from "../../hooks.ts";
 
 export interface IOGroupDropAreaProps {
-  path: TimePointPath;
+  path: OperatorGroupPath;
   afterId: Id | undefined; // first in list if undefined
 }
 
 export default function IOGroupDropArea(props: IOGroupDropAreaProps) {
   const { path, afterId } = props;
+  const moveIOGroup = useMoveIOGroup();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragIOGroupPayload;
-      console.log(
-        `DEBUG(KM): dropHandler() - path=${JSON.stringify(
-          path
-        )} afterId=${afterId}\ndata=`,
-        data
-      );
+      const source = payload as DragIOGroupPayload;
+
+      const target: DropIOGroupPayload = {
+        path,
+        afterId,
+      };
+
+      moveIOGroup(source, target);
     },
-    [path, afterId]
+    [afterId, moveIOGroup, path]
   );
 
   const addHandler = useCallback(

@@ -22,6 +22,20 @@ import {
   type OperatorGroup,
   type Timeline,
   type TimePoint,
+  type DragIOGroupPayload,
+  type DropIOGroupPayload,
+  type OperatorGroupPath,
+  type DragOperatorGroupPayload,
+  type DropOperatorGroupPayload,
+  type TimePointPath,
+  type DragTimePointPayload,
+  type DropTimePointPayload,
+  type ConceptPath,
+  type TimelinePath,
+  type DragConceptPayload,
+  type DropConceptPayload,
+  type DragTimelinePayload,
+  type DropTimelinePayload,
 } from "./types.ts";
 import {
   createConcept,
@@ -415,8 +429,11 @@ const slice = createSlice({
       const tp = target.path;
       const sourceDomain = state.domains[sp.domainId];
       const targetDomain = state.domains[tp.domainId];
-
       const nodeInstId = source.nodeInstId;
+
+      // already in this place, ignore
+      if (nodeInstId === target.afterId) return;
+
       const nodeInst = getNodeInstFromPath(sourceDomain, sp, nodeInstId);
       if (!nodeInst) {
         console.warn("Node Instance not found in path.");
@@ -467,11 +484,249 @@ const slice = createSlice({
           const afterId = target.afterId;
           const afterIndex = outputs.findIndex(({ id }) => id === afterId);
           if (afterIndex === -1) {
-            targetIOGroup.outputs.splice(0, 0, nodeInst);
+            outputs.splice(0, 0, nodeInst);
           } else {
-            targetIOGroup.outputs.splice(afterIndex + 1, 0, nodeInst);
+            outputs.splice(afterIndex + 1, 0, nodeInst);
           }
         }
+      }
+    },
+
+    moveIOGroup: (
+      state,
+      action: PayloadAction<{
+        source: DragIOGroupPayload;
+        target: DropIOGroupPayload;
+      }>
+    ) => {
+      const { source, target } = action.payload;
+      const sp = source.path;
+      const tp = target.path;
+      const sourceDomain = state.domains[sp.domainId];
+      const targetDomain = state.domains[tp.domainId];
+      const ioGroupId = source.ioGroupId;
+
+      // already in this place, ignore
+      if (ioGroupId === target.afterId) return;
+
+      const sourceOpGroup = getOperatorGroupFromPath(sourceDomain, sp);
+      if (!sourceOpGroup) {
+        console.warn("Source Operator Group not found in path.");
+        return;
+      }
+
+      const targetOpGroup = getOperatorGroupFromPath(targetDomain, tp);
+      if (!targetOpGroup) {
+        console.warn("Target Operator Group not found in path.");
+        return;
+      }
+
+      const ioGroup = getIOGroupFromOperatorGroup(sourceOpGroup, ioGroupId);
+      if (!ioGroup) {
+        console.warn("IO Group not found in path.");
+        return;
+      }
+
+      // first remove from source (known to exist), then add to target
+      sourceOpGroup.ioGroups = sourceOpGroup.ioGroups.filter(
+        ({ id }) => id !== ioGroupId
+      );
+
+      const ioGroups = targetOpGroup.ioGroups;
+      const afterId = target.afterId;
+      const afterIndex = ioGroups.findIndex(({ id }) => id === afterId);
+      if (afterIndex === -1) {
+        ioGroups.splice(0, 0, ioGroup);
+      } else {
+        ioGroups.splice(afterIndex + 1, 0, ioGroup);
+      }
+    },
+
+    moveOperatorGroup: (
+      state,
+      action: PayloadAction<{
+        source: DragOperatorGroupPayload;
+        target: DropOperatorGroupPayload;
+      }>
+    ) => {
+      const { source, target } = action.payload;
+      const sp = source.path;
+      const tp = target.path;
+      const sourceDomain = state.domains[sp.domainId];
+      const targetDomain = state.domains[tp.domainId];
+      const opGroupId = source.opGroupId;
+
+      // already in this place, ignore
+      if (opGroupId === target.afterId) return;
+
+      const sourceTimePoint = getTimePointFromPath(sourceDomain, sp);
+      if (!sourceTimePoint) {
+        console.warn("Source Time Point not found in path.");
+        return;
+      }
+
+      const targetTimePoint = getTimePointFromPath(targetDomain, tp);
+      if (!targetTimePoint) {
+        console.warn("Target Time Point not found in path.");
+        return;
+      }
+
+      const opGroup = getOperatorGroupFromTimePoint(sourceTimePoint, opGroupId);
+      if (!opGroup) {
+        console.warn("Operator Group not found in path.");
+        return;
+      }
+
+      // first remove from source (known to exist), then add to target
+      sourceTimePoint.operatorGroups = sourceTimePoint.operatorGroups.filter(
+        ({ id }) => id !== opGroupId
+      );
+
+      const operatorGroups = targetTimePoint.operatorGroups;
+      const afterId = target.afterId;
+      const afterIndex = operatorGroups.findIndex(({ id }) => id === afterId);
+      if (afterIndex === -1) {
+        operatorGroups.splice(0, 0, opGroup);
+      } else {
+        operatorGroups.splice(afterIndex + 1, 0, opGroup);
+      }
+    },
+
+    moveTimePoint: (
+      state,
+      action: PayloadAction<{
+        source: DragTimePointPayload;
+        target: DropTimePointPayload;
+      }>
+    ) => {
+      const { source, target } = action.payload;
+      const sp = source.path;
+      const tp = target.path;
+      const sourceDomain = state.domains[sp.domainId];
+      const targetDomain = state.domains[tp.domainId];
+      const timePointId = source.timePointId;
+
+      // already in this place, ignore
+      if (timePointId === target.afterId) return;
+
+      const sourceConcept = getConceptFromPath(sourceDomain, sp);
+      if (!sourceConcept) {
+        console.warn("Source Concept not found in path.");
+        return;
+      }
+
+      const targetConcept = getConceptFromPath(targetDomain, tp);
+      if (!targetConcept) {
+        console.warn("Target Concept not found in path.");
+        return;
+      }
+
+      const timePoint = getTimePointFromConcept(sourceConcept, timePointId);
+      if (!timePoint) {
+        console.warn("Time Point not found in path.");
+        return;
+      }
+
+      // first remove from source (known to exist), then add to target
+      sourceConcept.timePoints = sourceConcept.timePoints.filter(
+        ({ id }) => id !== timePointId
+      );
+
+      const timePoints = targetConcept.timePoints;
+      const afterId = target.afterId;
+      const afterIndex = timePoints.findIndex(({ id }) => id === afterId);
+      if (afterIndex === -1) {
+        timePoints.splice(0, 0, timePoint);
+      } else {
+        timePoints.splice(afterIndex + 1, 0, timePoint);
+      }
+    },
+
+    moveConcept: (
+      state,
+      action: PayloadAction<{
+        source: DragConceptPayload;
+        target: DropConceptPayload;
+      }>
+    ) => {
+      const { source, target } = action.payload;
+      const sp = source.path;
+      const tp = target.path;
+      const sourceDomain = state.domains[sp.domainId];
+      const targetDomain = state.domains[tp.domainId];
+      const conceptId = source.conceptId;
+
+      // already in this place, ignore
+      if (conceptId === target.afterId) return;
+
+      const sourceTimeline = getTimelineFromPath(sourceDomain, sp);
+      if (!sourceTimeline) {
+        console.warn("Source Concept not found in path.");
+        return;
+      }
+
+      const targetTimeline = getTimelineFromPath(targetDomain, tp);
+      if (!targetTimeline) {
+        console.warn("Target Concept not found in path.");
+        return;
+      }
+
+      const concept = getConceptFromTimeline(sourceTimeline, conceptId);
+      if (!concept) {
+        console.warn("Concept not found in path.");
+        return;
+      }
+
+      // first remove from source (known to exist), then add to target
+      sourceTimeline.concepts = sourceTimeline.concepts.filter(
+        ({ id }) => id !== conceptId
+      );
+
+      const concepts = targetTimeline.concepts;
+      const afterId = target.afterId;
+      const afterIndex = concepts.findIndex(({ id }) => id === afterId);
+      if (afterIndex === -1) {
+        concepts.splice(0, 0, concept);
+      } else {
+        concepts.splice(afterIndex + 1, 0, concept);
+      }
+    },
+
+    moveTimeline: (
+      state,
+      action: PayloadAction<{
+        source: DragTimelinePayload;
+        target: DropTimelinePayload;
+      }>
+    ) => {
+      const { source, target } = action.payload;
+      const sp = source.path;
+      const tp = target.path;
+      const sourceDomain = state.domains[sp.domainId];
+      const targetDomain = state.domains[tp.domainId];
+      const timelineId = source.timelineId;
+
+      // already in this place, ignore
+      if (timelineId === target.afterId) return;
+
+      const concept = getTimelineFromDomain(sourceDomain, timelineId);
+      if (!concept) {
+        console.warn("Timeline not found in path.");
+        return;
+      }
+
+      // first remove from source (known to exist), then add to target
+      sourceDomain.timelines = sourceDomain.timelines.filter(
+        ({ id }) => id !== timelineId
+      );
+
+      const timelines = targetDomain.timelines;
+      const afterId = target.afterId;
+      const afterIndex = timelines.findIndex(({ id }) => id === afterId);
+      if (afterIndex === -1) {
+        timelines.splice(0, 0, concept);
+      } else {
+        timelines.splice(afterIndex + 1, 0, concept);
       }
     },
 
@@ -492,39 +747,53 @@ const slice = createSlice({
   },
 });
 
-export const { moveNodeInst, selectId, switchDomain, switchTool } =
-  slice.actions;
+export const {
+  moveConcept,
+  moveIOGroup,
+  moveNodeInst,
+  moveOperatorGroup,
+  moveTimePoint,
+  moveTimeline,
+  selectId,
+  switchDomain,
+  switchTool,
+} = slice.actions;
 export default slice;
 
-// helpers...
+// state helpers...
 
-function getNodeInstFromPath(
+function getTimelineFromPath(
   domain: Domain,
-  path: IOGroupPath,
-  nodeInstId: Id
-): NodeInst | undefined {
-  const opGroup = getOperatorGroupFromPath(domain, path);
-  if (!opGroup) return undefined;
+  path: TimelinePath
+): Timeline | undefined {
+  return getTimelineFromDomain(domain, path.timelineId);
+}
 
-  return getNodeInstFromOperatorGroup(opGroup, nodeInstId);
+function getConceptFromPath(
+  domain: Domain,
+  path: ConceptPath
+): Concept | undefined {
+  const timeline = getTimelineFromPath(domain, path);
+  if (!timeline) return undefined;
+  return getConceptFromTimeline(timeline, path.conceptId);
+}
+
+function getTimePointFromPath(
+  domain: Domain,
+  path: TimePointPath
+): TimePoint | undefined {
+  const concept = getConceptFromPath(domain, path);
+  if (!concept) return undefined;
+  return getTimePointFromConcept(concept, path.timePointId);
 }
 
 function getOperatorGroupFromPath(
   domain: Domain,
-  path: IOGroupPath
+  path: OperatorGroupPath
 ): OperatorGroup | undefined {
-  const { timelineId, conceptId, timePointId, opGroupId } = path;
-
-  const timeline = getTimelineFromDomain(domain, timelineId);
-  if (!timeline) return undefined;
-
-  const concept = getConceptFromTimeline(timeline, conceptId);
-  if (!concept) return undefined;
-
-  const timePoint = getTimePointFromConcept(concept, timePointId);
+  const timePoint = getTimePointFromPath(domain, path);
   if (!timePoint) return undefined;
-
-  return getOperatorGroupFromTimePoint(timePoint, opGroupId);
+  return getOperatorGroupFromTimePoint(timePoint, path.opGroupId);
 }
 
 function getIOGroupFromPath(
@@ -533,50 +802,17 @@ function getIOGroupFromPath(
 ): IOGroup | undefined {
   const opGroup = getOperatorGroupFromPath(domain, path);
   if (!opGroup) return undefined;
-
   return getIOGroupFromOperatorGroup(opGroup, path.ioGroupId);
 }
 
-function getNodeInstFromOperatorGroup(
-  opGroup: OperatorGroup,
+function getNodeInstFromPath(
+  domain: Domain,
+  path: IOGroupPath,
   nodeInstId: Id
 ): NodeInst | undefined {
-  if (opGroup.operatorNode?.id === nodeInstId) {
-    return opGroup.operatorNode;
-  }
-
-  return getNodeInstFromIOGroups(opGroup.ioGroups, nodeInstId);
-}
-
-function getNodeInstFromIOGroups(
-  ioGroups: IOGroup[],
-  nodeInstId: Id
-): NodeInst | undefined {
-  for (let ioGroupIndex = 0; ioGroupIndex < ioGroups.length; ioGroupIndex++) {
-    const nodeInst = getNodeInstFromIOGroup(ioGroups[ioGroupIndex], nodeInstId);
-    if (nodeInst) return nodeInst;
-  }
-
-  return undefined;
-}
-
-function getNodeInstFromIOGroup(
-  ioGroup: IOGroup,
-  nodeInstId: Id
-): NodeInst | undefined {
-  if (ioGroup.input?.id === nodeInstId) {
-    return ioGroup.input;
-  }
-
-  const outputs = ioGroup.outputs;
-  for (let outputIndex = 0; outputIndex < outputs.length; outputIndex++) {
-    const output = outputs[outputIndex];
-    if (output.id === nodeInstId) {
-      return output;
-    }
-  }
-
-  return undefined;
+  const opGroup = getOperatorGroupFromPath(domain, path);
+  if (!opGroup) return undefined;
+  return getNodeInstFromOperatorGroup(opGroup, nodeInstId);
 }
 
 function getTimelineFromDomain(
@@ -618,6 +854,45 @@ function getIOGroupFromOperatorGroup(
     const ioGroup = ioGroups[ioGroupIndex];
     if (ioGroup.id === ioGroupId) {
       return ioGroup;
+    }
+  }
+  return undefined;
+}
+
+function getNodeInstFromOperatorGroup(
+  opGroup: OperatorGroup,
+  nodeInstId: Id
+): NodeInst | undefined {
+  if (opGroup.operatorNode?.id === nodeInstId) {
+    return opGroup.operatorNode;
+  }
+  return getNodeInstFromIOGroups(opGroup.ioGroups, nodeInstId);
+}
+
+function getNodeInstFromIOGroups(
+  ioGroups: IOGroup[],
+  nodeInstId: Id
+): NodeInst | undefined {
+  for (let ioGroupIndex = 0; ioGroupIndex < ioGroups.length; ioGroupIndex++) {
+    const nodeInst = getNodeInstFromIOGroup(ioGroups[ioGroupIndex], nodeInstId);
+    if (nodeInst) return nodeInst;
+  }
+  return undefined;
+}
+
+function getNodeInstFromIOGroup(
+  ioGroup: IOGroup,
+  nodeInstId: Id
+): NodeInst | undefined {
+  if (ioGroup.input?.id === nodeInstId) {
+    return ioGroup.input;
+  }
+
+  const outputs = ioGroup.outputs;
+  for (let outputIndex = 0; outputIndex < outputs.length; outputIndex++) {
+    const output = outputs[outputIndex];
+    if (output.id === nodeInstId) {
+      return output;
     }
   }
 

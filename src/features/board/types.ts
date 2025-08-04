@@ -206,10 +206,37 @@ export type DropNodeInstSlotType =
   | typeof NIS_INPUT
   | typeof NIS_OUTPUT;
 
+// drop payloads "afterId" is the relative sibling Id to place after if applicable
+
 export type DropNodeInstPayload = {
   path: IOGroupPath;
   slot: DropNodeInstSlotType;
-  afterId: Id | undefined; // the relative sibling Id to place after if applicable
+  afterId: Id | undefined;
+};
+
+export type DropIOGroupPayload = {
+  path: OperatorGroupPath;
+  afterId: Id | undefined;
+};
+
+export type DropOperatorGroupPayload = {
+  path: TimePointPath;
+  afterId: Id | undefined;
+};
+
+export type DropTimePointPayload = {
+  path: ConceptPath;
+  afterId: Id | undefined;
+};
+
+export type DropConceptPayload = {
+  path: TimelinePath;
+  afterId: Id | undefined;
+};
+
+export type DropTimelinePayload = {
+  path: DomainPath;
+  afterId: Id | undefined;
 };
 
 // drag and drop data format types

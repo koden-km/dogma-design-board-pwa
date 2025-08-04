@@ -2,13 +2,15 @@ import { useCallback } from "react";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_OP_GROUP,
-  type DragIOGroupPayload,
+  type DragOperatorGroupPayload,
   type DragPayload,
+  type DropOperatorGroupPayload,
   type Id,
   type TimePointPath,
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
+import { useMoveOperatorGroup } from "../../hooks.ts";
 
 export interface OperatorGroupDropAreaProps {
   path: TimePointPath;
@@ -19,18 +21,29 @@ export default function OperatorGroupDropArea(
   props: OperatorGroupDropAreaProps
 ) {
   const { path, afterId } = props;
+  const moveOperatorGroup = useMoveOperatorGroup();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragIOGroupPayload;
+      const source = payload as DragOperatorGroupPayload;
+
+      const target: DropOperatorGroupPayload = {
+        path,
+        afterId,
+      };
+
       console.log(
         `DEBUG(KM): dropHandler() - path=${JSON.stringify(
           path
-        )} afterId=${afterId}\ndata=`,
-        data
+        )} afterId=${afterId}\nsource=`,
+        source,
+        "\ntarget=",
+        target
       );
+
+      moveOperatorGroup(source, target);
     },
-    [path, afterId]
+    [afterId, moveOperatorGroup, path]
   );
 
   const addHandler = useCallback(
