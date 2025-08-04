@@ -24,6 +24,7 @@ export default function Concept(props: ConceptProps) {
   const handleDragStart = useCallback(
     (e: DragEvent) => {
       if (e.dataTransfer) {
+        e.stopPropagation();
         e.dataTransfer.setData(DDF_CONCEPT, packDnDConcept(timelinePath, id));
         e.dataTransfer.effectAllowed = "move";
       }

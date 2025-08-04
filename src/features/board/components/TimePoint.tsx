@@ -23,6 +23,7 @@ export default function TimePoint(props: TimePointProps) {
   const handleDragStart = useCallback(
     (e: DragEvent) => {
       if (e.dataTransfer) {
+        e.stopPropagation();
         e.dataTransfer.setData(
           DDF_TIME_POINT,
           packDnDTimePoint(conceptPath, id)
@@ -38,7 +39,6 @@ export default function TimePoint(props: TimePointProps) {
       <Selectable id={id}>
         <FlexLayout isVertical className={styles.timePoint}>
           <div className={styles.header}>
-            {/* <div><code>TimePoint:{id}</code></div> */}
             <button type="button" disabled>
               Remove Time Point
             </button>

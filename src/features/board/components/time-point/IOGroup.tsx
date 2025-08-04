@@ -26,6 +26,7 @@ export default function IOGroup(props: IOGroupProps) {
   const handleDragStart = useCallback(
     (e: DragEvent) => {
       if (e.dataTransfer) {
+        e.stopPropagation();
         e.dataTransfer.setData(DDF_IO_GROUP, packDnDIOGroup(opGroupPath, id));
         e.dataTransfer.effectAllowed = "move";
       }

@@ -27,6 +27,7 @@ export default function NodeCard(props: NodeCardProps) {
   const handleDragStart = useCallback(
     (e: DragEvent) => {
       if (e.dataTransfer) {
+        e.stopPropagation();
         // force path to be a full IO Group path with an undefined ioGroupId
         e.dataTransfer.setData(
           DDF_NODE_X,

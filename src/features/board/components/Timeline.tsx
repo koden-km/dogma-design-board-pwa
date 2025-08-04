@@ -24,6 +24,7 @@ export default function Timeline(props: TimelineProps) {
   const handleDragStart = useCallback(
     (e: DragEvent) => {
       if (e.dataTransfer) {
+        e.stopPropagation();
         e.dataTransfer.setData(DDF_TIMELINE, packDnDTimeline(domainPath, id));
         e.dataTransfer.effectAllowed = "move";
       }
@@ -42,7 +43,6 @@ export default function Timeline(props: TimelineProps) {
       <Selectable id={id}>
         <FlexLayout isDraggable isVertical className={styles.timeline}>
           <div className={styles.header}>
-            {/* <div><code>Timeline:{id}</code></div> */}
             <FlexLayout isHorizontal>
               <button type="button" onClick={handleVisibleToggle}>
                 {isVisible ? "Hide Timeline" : "Show Timeline"}

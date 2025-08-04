@@ -32,15 +32,6 @@ export default function OperatorGroupDropArea(
         afterId,
       };
 
-      console.log(
-        `DEBUG(KM): dropHandler() - path=${JSON.stringify(
-          path
-        )} afterId=${afterId}\nsource=`,
-        source,
-        "\ntarget=",
-        target
-      );
-
       moveOperatorGroup(source, target);
     },
     [afterId, moveOperatorGroup, path]

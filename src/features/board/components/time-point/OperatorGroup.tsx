@@ -29,6 +29,7 @@ export default function OperatorGroup(props: OperatorGroupProps) {
   const handleDragStart = useCallback(
     (e: DragEvent) => {
       if (e.dataTransfer) {
+        e.stopPropagation();
         e.dataTransfer.setData(DDF_OP_GROUP, packDnDOperatorGroup(tpPath, id));
         e.dataTransfer.effectAllowed = "move";
       }
