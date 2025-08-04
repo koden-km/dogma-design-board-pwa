@@ -6,15 +6,15 @@ import {
   type DragNodeInstPayload,
   type DragPayload,
   type DropNodeInstPayload,
-  type NodeIOGroupPath,
-  type NodeOperatorGroupPath,
+  type IOGroupPath,
+  type OperatorGroupPath,
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 import { useMoveNodeInst } from "../../hooks.ts";
 
 export interface OperatorDropAreaProps {
-  path: NodeOperatorGroupPath;
+  path: OperatorGroupPath;
 }
 
 export default function OperatorDropArea(props: OperatorDropAreaProps) {
@@ -27,7 +27,7 @@ export default function OperatorDropArea(props: OperatorDropAreaProps) {
       if (!source) return;
 
       const target: DropNodeInstPayload = {
-        path: path as NodeIOGroupPath,
+        path: path as IOGroupPath,
         slot: NIS_OPERATOR,
         afterId: undefined,
       };

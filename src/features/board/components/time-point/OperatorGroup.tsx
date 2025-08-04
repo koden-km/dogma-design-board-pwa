@@ -1,6 +1,6 @@
 import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { NodeOperatorGroup, TimePointPath } from "../../types.ts";
+import type { OperatorGroup, TimePointPath } from "../../types.ts";
 import NodeCard from "../NodeCard.tsx";
 import styles from "./TimePoint.module.css";
 import IOGroup from "./IOGroup.tsx";
@@ -11,11 +11,11 @@ import { useOperatorGroupPath } from "../../path-hooks.ts";
 
 export interface OperatorGroupProps {
   path: TimePointPath;
-  group: NodeOperatorGroup;
+  group: OperatorGroup;
 }
 
 export default function OperatorGroup(props: OperatorGroupProps) {
-  const { id, operatorNode, ioNodeGroups } = props.group;
+  const { id, operatorNode, ioGroups } = props.group;
   const path = useOperatorGroupPath(props.path, id);
 
   return (
@@ -28,7 +28,7 @@ export default function OperatorGroup(props: OperatorGroupProps) {
 
         <OperatorIOGroupDropArea path={path} afterId={undefined} />
 
-        {ioNodeGroups.map((ioGroup) => (
+        {ioGroups.map((ioGroup) => (
           <Fragment key={ioGroup.id}>
             <IOGroup path={path} group={ioGroup} />
             <OperatorIOGroupDropArea path={path} afterId={ioGroup.id} />

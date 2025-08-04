@@ -1,5 +1,5 @@
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { NodeIOGroup, NodeOperatorGroupPath } from "../../types.ts";
+import type { IOGroup, OperatorGroupPath } from "../../types.ts";
 import styles from "./TimePoint.module.css";
 import Selectable from "../Selectable.tsx";
 import IOGroupInput from "./IOGroupInput.tsx";
@@ -7,8 +7,8 @@ import IOGroupOutputs from "./IOGroupOutputs.tsx";
 import { useIOGroupPath } from "../../path-hooks.ts";
 
 export interface IOGroupProps {
-  path: NodeOperatorGroupPath;
-  group: NodeIOGroup;
+  path: OperatorGroupPath;
+  group: IOGroup;
 }
 
 export default function IOGroup(props: IOGroupProps) {

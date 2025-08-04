@@ -3,7 +3,7 @@ import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_OP_GROUP,
   type ConceptPath,
-  type DragNodeIOGroupPayload,
+  type DragIOGroupPayload,
   type DragPayload,
   type Id,
 } from "../../types.ts";
@@ -20,7 +20,7 @@ export default function TimePointDropArea(props: TimePointDropAreaProps) {
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragNodeIOGroupPayload;
+      const data = payload as DragIOGroupPayload;
       console.log(
         `DEBUG(KM): dropHandler() - path=${JSON.stringify(
           path

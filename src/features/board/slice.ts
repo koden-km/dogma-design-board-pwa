@@ -17,9 +17,9 @@ import {
   type DropNodeInstPayload,
   type Id,
   type NodeInst,
-  type NodeIOGroup,
-  type NodeIOGroupPath,
-  type NodeOperatorGroup,
+  type IOGroup,
+  type IOGroupPath,
+  type OperatorGroup,
   type Timeline,
   type TimePoint,
 } from "./types.ts";
@@ -28,8 +28,8 @@ import {
   createDomain,
   createNodeDef,
   createNodeInst,
-  createNodeIOGroup,
-  createNodeOperatorGroup,
+  createIOGroup,
+  createOperatorGroup,
   createTimeline,
   createTimePoint,
 } from "./util.ts";
@@ -158,7 +158,7 @@ defaultDomain.timelines.push(
       [
         // aggregate example 1 time point
         createTimePoint(uuidv4(), [
-          createNodeOperatorGroup(
+          createOperatorGroup(
             uuidv4(),
             createNodeInst(
               defaultDomain.id,
@@ -167,7 +167,7 @@ defaultDomain.timelines.push(
               "Custom instance comment"
             ),
             [
-              createNodeIOGroup(
+              createIOGroup(
                 uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand1.id, uuidv4()),
                 [
@@ -191,7 +191,7 @@ defaultDomain.timelines.push(
                   ),
                 ]
               ),
-              createNodeIOGroup(
+              createIOGroup(
                 uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand2.id, uuidv4()),
                 [
@@ -216,7 +216,7 @@ defaultDomain.timelines.push(
         // process example 1 time point
         createTimePoint(uuidv4(), [
           // operator group 1
-          createNodeOperatorGroup(
+          createOperatorGroup(
             uuidv4(),
             createNodeInst(
               defaultDomain.id,
@@ -225,7 +225,7 @@ defaultDomain.timelines.push(
               "Custom instance comment"
             ),
             [
-              createNodeIOGroup(
+              createIOGroup(
                 uuidv4(),
                 createNodeInst(
                   defaultDomain.id,
@@ -246,7 +246,7 @@ defaultDomain.timelines.push(
           ),
 
           // operator group 2
-          createNodeOperatorGroup(
+          createOperatorGroup(
             uuidv4(),
             createNodeInst(
               defaultDomain.id,
@@ -255,7 +255,7 @@ defaultDomain.timelines.push(
               "Some other process will handle a different event at this time point"
             ),
             [
-              createNodeIOGroup(
+              createIOGroup(
                 uuidv4(),
                 createNodeInst(defaultDomain.id, someEvent4.id, uuidv4()),
                 [createNodeInst(defaultDomain.id, someCommand4.id, uuidv4())]
@@ -266,7 +266,7 @@ defaultDomain.timelines.push(
 
         // view example 1 time point
         createTimePoint(uuidv4(), [
-          createNodeOperatorGroup(
+          createOperatorGroup(
             uuidv4(),
             createNodeInst(
               defaultDomain.id,
@@ -275,7 +275,7 @@ defaultDomain.timelines.push(
               "Some user action here"
             ),
             [
-              createNodeIOGroup(uuidv4(), undefined, [
+              createIOGroup(uuidv4(), undefined, [
                 createNodeInst(
                   defaultDomain.id,
                   someCommand3.id,
@@ -289,7 +289,7 @@ defaultDomain.timelines.push(
 
         // process example 2 time point
         createTimePoint(uuidv4(), [
-          createNodeOperatorGroup(
+          createOperatorGroup(
             uuidv4(),
             createNodeInst(
               defaultDomain.id,
@@ -298,7 +298,7 @@ defaultDomain.timelines.push(
               "Custom instance comment"
             ),
             [
-              createNodeIOGroup(
+              createIOGroup(
                 uuidv4(),
                 createNodeInst(
                   defaultDomain.id,
@@ -314,7 +314,7 @@ defaultDomain.timelines.push(
 
         // aggregate example 2 time point
         createTimePoint(uuidv4(), [
-          createNodeOperatorGroup(
+          createOperatorGroup(
             uuidv4(),
             createNodeInst(
               defaultDomain.id,
@@ -324,14 +324,14 @@ defaultDomain.timelines.push(
             ),
             [
               // the user command
-              createNodeIOGroup(
+              createIOGroup(
                 uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand3.id, uuidv4()),
                 [createNodeInst(defaultDomain.id, someEvent1.id, uuidv4())]
               ),
 
               // the timeout cancel command
-              createNodeIOGroup(
+              createIOGroup(
                 uuidv4(),
                 createNodeInst(defaultDomain.id, someCommand4.id, uuidv4()),
                 [
@@ -500,7 +500,7 @@ export default slice;
 
 function getNodeInstFromPath(
   domain: Domain,
-  path: NodeIOGroupPath,
+  path: IOGroupPath,
   nodeInstId: Id
 ): NodeInst | undefined {
   const opGroup = getOperatorGroupFromPath(domain, path);
@@ -511,8 +511,8 @@ function getNodeInstFromPath(
 
 function getOperatorGroupFromPath(
   domain: Domain,
-  path: NodeIOGroupPath
-): NodeOperatorGroup | undefined {
+  path: IOGroupPath
+): OperatorGroup | undefined {
   const { timelineId, conceptId, timePointId, opGroupId } = path;
 
   const timeline = getTimelineFromDomain(domain, timelineId);
@@ -529,8 +529,8 @@ function getOperatorGroupFromPath(
 
 function getIOGroupFromPath(
   domain: Domain,
-  path: NodeIOGroupPath
-): NodeIOGroup | undefined {
+  path: IOGroupPath
+): IOGroup | undefined {
   const opGroup = getOperatorGroupFromPath(domain, path);
   if (!opGroup) return undefined;
 
@@ -538,18 +538,18 @@ function getIOGroupFromPath(
 }
 
 function getNodeInstFromOperatorGroup(
-  opGroup: NodeOperatorGroup,
+  opGroup: OperatorGroup,
   nodeInstId: Id
 ): NodeInst | undefined {
   if (opGroup.operatorNode?.id === nodeInstId) {
     return opGroup.operatorNode;
   }
 
-  return getNodeInstFromIOGroups(opGroup.ioNodeGroups, nodeInstId);
+  return getNodeInstFromIOGroups(opGroup.ioGroups, nodeInstId);
 }
 
 function getNodeInstFromIOGroups(
-  ioGroups: NodeIOGroup[],
+  ioGroups: IOGroup[],
   nodeInstId: Id
 ): NodeInst | undefined {
   for (let ioGroupIndex = 0; ioGroupIndex < ioGroups.length; ioGroupIndex++) {
@@ -561,7 +561,7 @@ function getNodeInstFromIOGroups(
 }
 
 function getNodeInstFromIOGroup(
-  ioGroup: NodeIOGroup,
+  ioGroup: IOGroup,
   nodeInstId: Id
 ): NodeInst | undefined {
   if (ioGroup.input?.id === nodeInstId) {
@@ -603,17 +603,17 @@ function getTimePointFromConcept(
 function getOperatorGroupFromTimePoint(
   timePoint: TimePoint,
   opGroupId: Id
-): NodeOperatorGroup | undefined {
+): OperatorGroup | undefined {
   return timePoint.operatorGroups.find(
     ({ id }) => id === opGroupId
-  ) as NodeOperatorGroup;
+  ) as OperatorGroup;
 }
 
 function getIOGroupFromOperatorGroup(
-  opGroup: NodeOperatorGroup,
+  opGroup: OperatorGroup,
   ioGroupId: Id
-): NodeIOGroup | undefined {
-  const ioGroups = opGroup.ioNodeGroups;
+): IOGroup | undefined {
+  const ioGroups = opGroup.ioGroups;
   for (let ioGroupIndex = 0; ioGroupIndex < ioGroups.length; ioGroupIndex++) {
     const ioGroup = ioGroups[ioGroupIndex];
     if (ioGroup.id === ioGroupId) {

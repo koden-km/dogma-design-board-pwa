@@ -1,8 +1,8 @@
-import { type NodeInst, type NodeIOGroupPath } from "../../types.ts";
+import { type NodeInst, type IOGroupPath } from "../../types.ts";
 import NodeCard from "../NodeCard.tsx";
 
 export interface IOGroupOutputProps {
-  path: NodeIOGroupPath;
+  path: IOGroupPath;
   nodeInst: NodeInst;
 }
 

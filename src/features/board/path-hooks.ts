@@ -3,8 +3,8 @@ import type {
   ConceptPath,
   DomainPath,
   Id,
-  NodeIOGroupPath,
-  NodeOperatorGroupPath,
+  IOGroupPath,
+  OperatorGroupPath,
   TimelinePath,
   TimePointPath,
 } from "./types";
@@ -47,17 +47,17 @@ export const useOperatorGroupPath = (
   parentPath: TimePointPath,
   opGroupId: Id
 ) => {
-  return useMemo<NodeOperatorGroupPath>(
+  return useMemo<OperatorGroupPath>(
     () => ({ ...parentPath, opGroupId }),
     [parentPath, opGroupId]
   );
 };
 
 export const useIOGroupPath = (
-  parentPath: NodeOperatorGroupPath,
+  parentPath: OperatorGroupPath,
   ioGroupId: Id
 ) => {
-  return useMemo<NodeIOGroupPath>(
+  return useMemo<IOGroupPath>(
     () => ({
       ...parentPath,
       ioGroupId,

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import {
   DDF_OP_GROUP,
-  type DragNodeIOGroupPayload,
+  type DragIOGroupPayload,
   type DragPayload,
   type Id,
 } from "../../types.ts";
@@ -19,7 +19,7 @@ export default function TimelineDropArea(props: TimelineDropAreaProps) {
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragNodeIOGroupPayload;
+      const data = payload as DragIOGroupPayload;
       console.log(
         `DEBUG(KM): dropHandler() - domainId=${domainId} afterId=${afterId}\ndata=`,
         data

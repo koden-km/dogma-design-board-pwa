@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 import FlexLayout from "@/components/FlexLayout.tsx";
-import { type NodeInst, type NodeIOGroupPath } from "../../types.ts";
+import { type NodeInst, type IOGroupPath } from "../../types.ts";
 import IOGroupOutput from "./IOGroupOutput.tsx";
 import OperatorOutputDropArea from "../drop-area/OperatorOutputDropArea.tsx";
 
 export interface IOGroupOutputsProps {
-  path: NodeIOGroupPath;
+  path: IOGroupPath;
   outputs: NodeInst[];
 }
 

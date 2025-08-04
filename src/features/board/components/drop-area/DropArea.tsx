@@ -13,11 +13,11 @@ import {
 } from "../../types.ts";
 import {
   unpackDnDNodeInst,
-  unpackDnDNodeIOConcept,
-  unpackDnDNodeIOGroup,
-  unpackDnDNodeIOTimeline,
-  unpackDnDNodeIOTimePoint,
-  unpackDnDNodeOperatorGroup,
+  unpackDnDConcept,
+  unpackDnDIOGroup,
+  unpackDnDTimeline,
+  unpackDnDTimePoint,
+  unpackDnDOperatorGroup,
 } from "../../util.ts";
 
 export interface DropAreaProps {
@@ -52,10 +52,10 @@ export default function DropArea(props: DropAreaProps) {
       e.preventDefault();
       if (!e.dataTransfer) return;
       if (e.dataTransfer.types.includes(accepts)) {
-        // Supported type
+        // supported type
         e.dataTransfer.dropEffect = "move";
       } else {
-        // Unsupported type
+        // unsupported type
         e.dataTransfer.dropEffect = "none";
       }
     };
@@ -70,15 +70,15 @@ export default function DropArea(props: DropAreaProps) {
           case DDF_NODE_X:
             return onDrop(unpackDnDNodeInst(jsonData));
           case DDF_OP_GROUP:
-            return onDrop(unpackDnDNodeOperatorGroup(jsonData));
+            return onDrop(unpackDnDOperatorGroup(jsonData));
           case DDF_IO_GROUP:
-            return onDrop(unpackDnDNodeIOGroup(jsonData));
+            return onDrop(unpackDnDIOGroup(jsonData));
           case DDF_TIME_POINT:
-            return onDrop(unpackDnDNodeIOTimePoint(jsonData));
+            return onDrop(unpackDnDTimePoint(jsonData));
           case DDF_CONCEPT:
-            return onDrop(unpackDnDNodeIOConcept(jsonData));
+            return onDrop(unpackDnDConcept(jsonData));
           case DDF_TIMELINE:
-            return onDrop(unpackDnDNodeIOTimeline(jsonData));
+            return onDrop(unpackDnDTimeline(jsonData));
         }
       }
     };

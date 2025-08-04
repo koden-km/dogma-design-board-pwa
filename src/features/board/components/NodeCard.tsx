@@ -3,15 +3,15 @@ import Card from "@/features/card/Card.tsx";
 import {
   DDF_NODE_X,
   type NodeInst,
-  type NodeIOGroupPath,
-  type NodeOperatorGroupPath,
+  type IOGroupPath,
+  type OperatorGroupPath,
 } from "../types.ts";
 import { useCurrentDomain, useDomainName, useDomainNodeDef } from "../hooks.ts";
 import Selectable from "./Selectable.tsx";
 import { packDnDNodeInst } from "../util.ts";
 
 export interface NodeCardProps {
-  path: NodeOperatorGroupPath | NodeIOGroupPath;
+  path: OperatorGroupPath | IOGroupPath;
   nodeInst: NodeInst;
 }
 
@@ -31,9 +31,10 @@ export default function NodeCard(props: NodeCardProps) {
 
     const dragStartHandler = (e: DragEvent) => {
       if (e.dataTransfer) {
+        // force path to be a full IO Group path with an undefined ioGroupId
         e.dataTransfer.setData(
           DDF_NODE_X,
-          packDnDNodeInst(path as NodeIOGroupPath, id, type)
+          packDnDNodeInst(path as IOGroupPath, id, type)
         );
         e.dataTransfer.effectAllowed = "move";
       }

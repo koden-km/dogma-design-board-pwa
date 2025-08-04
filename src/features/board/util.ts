@@ -4,9 +4,9 @@ import {
   type TimelinePath,
   type Domain,
   type DragConceptPayload,
-  type DragNodeIOGroupPayload,
+  type DragIOGroupPayload,
   type DragNodeInstPayload,
-  type DragNodeOperatorGroupPayload,
+  type DragOperatorGroupPayload,
   type DragTimePointPayload,
   type DragTimelinePayload,
   type Id,
@@ -14,11 +14,11 @@ import {
   type IssueThread,
   type NodeDef,
   type NodeDefMap,
-  type NodeIOGroup,
-  type NodeOperatorGroupPath,
+  type IOGroup,
+  type OperatorGroupPath,
   type NodeInst,
-  type NodeIOGroupPath,
-  type NodeOperatorGroup,
+  type IOGroupPath,
+  type OperatorGroup,
   type TimePointPath,
   type NodeType,
   type TimePoint,
@@ -83,19 +83,14 @@ export function createTimeline(
         "Start by adding the business domain events to the board in a rough time order. They can be moved around as needed.",
         [
           createTimePoint(uuidv4(), [
-            createNodeOperatorGroup(uuidv4(), undefined, [
-              createNodeIOGroup(uuidv4()),
-            ]),
+            createOperatorGroup(uuidv4(), undefined, [createIOGroup(uuidv4())]),
           ]),
         ]
       )
     );
   }
 
-  return {
-    id,
-    concepts,
-  };
+  return { id, concepts };
 }
 
 // a grouping system for a bunch of time points on a timeline
@@ -105,43 +100,31 @@ export function createConcept(
   comment: string = "",
   timePoints: TimePoint[] = []
 ): Concept {
-  return {
-    id,
-    name,
-    comment,
-    timePoints,
-  };
+  return { id, name, comment, timePoints };
 }
 
 // messages that can occur during a time point and the operator that consumes or produces those messages at that time point
 export function createTimePoint(
   id: Id = uuidv4(),
-  operatorGroups: NodeOperatorGroup[] = []
+  operatorGroups: OperatorGroup[] = []
 ): TimePoint {
-  return {
-    id,
-    operatorGroups,
-  };
+  return { id, operatorGroups };
 }
 
-export function createNodeIOGroup(
+export function createIOGroup(
   id: Id = uuidv4(),
   input?: NodeInst,
   outputs: NodeInst[] = []
-): NodeIOGroup {
+): IOGroup {
   return { id, input, outputs };
 }
 
-export function createNodeOperatorGroup(
+export function createOperatorGroup(
   id: Id = uuidv4(),
   operatorNode?: NodeInst,
-  ioNodeGroups: NodeIOGroup[] = []
-): NodeOperatorGroup {
-  return {
-    id,
-    operatorNode,
-    ioNodeGroups,
-  };
+  ioGroups: IOGroup[] = []
+): OperatorGroup {
+  return { id, operatorNode, ioGroups };
 }
 
 // node definition
@@ -151,12 +134,7 @@ export function createNodeDef(
   type: NodeType,
   name: string
 ): NodeDef {
-  return {
-    domainId,
-    id,
-    name,
-    type,
-  };
+  return { domainId, id, name, type };
 }
 
 // node instance (an instance of a node def)
@@ -179,21 +157,18 @@ export function createNodeInst(
 // drag and drop
 
 export function packDnDNodeInst(
-  path: NodeIOGroupPath,
+  path: IOGroupPath,
   nodeInstId: Id,
   type: NodeType
 ): string {
   return JSON.stringify({ path, nodeInstId, type });
 }
 
-export function packDnDNodeIOGroup(
-  path: NodeOperatorGroupPath,
-  ioGroupId: Id
-): string {
+export function packDnDIOGroup(path: OperatorGroupPath, ioGroupId: Id): string {
   return JSON.stringify({ path, ioGroupId });
 }
 
-export function packDnDNodeOperatorGroup(
+export function packDnDOperatorGroup(
   path: TimePointPath,
   opGroupId: Id
 ): string {
@@ -216,26 +191,24 @@ export function unpackDnDNodeInst(jsonData: string): DragNodeInstPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeOperatorGroup(
+export function unpackDnDOperatorGroup(
   jsonData: string
-): DragNodeOperatorGroupPayload {
+): DragOperatorGroupPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeIOGroup(jsonData: string): DragNodeIOGroupPayload {
+export function unpackDnDIOGroup(jsonData: string): DragIOGroupPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeIOTimePoint(
-  jsonData: string
-): DragTimePointPayload {
+export function unpackDnDTimePoint(jsonData: string): DragTimePointPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeIOConcept(jsonData: string): DragConceptPayload {
+export function unpackDnDConcept(jsonData: string): DragConceptPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeIOTimeline(jsonData: string): DragTimelinePayload {
+export function unpackDnDTimeline(jsonData: string): DragTimelinePayload {
   return JSON.parse(jsonData);
 }

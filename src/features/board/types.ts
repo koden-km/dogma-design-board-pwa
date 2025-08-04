@@ -45,20 +45,18 @@ export type Concept = {
 // messages that can occur during a time point and the operator that consumes or produces those messages at that time point
 export type TimePoint = {
   id: Id;
-  operatorGroups: NodeOperatorGroup[]; // a list of operator node groups to model concurrent operations during this time point
+  operatorGroups: OperatorGroup[]; // a list of operator node groups to model concurrent operations during this time point
 };
 
-// TODO(KM): Drop the `Node` prefix? Rename to `HandlerGroup`?
-// an operator and all its groups of input->outputs
-export type NodeOperatorGroup = {
+// an operator (handler) and all its groups of input->outputs
+export type OperatorGroup = {
   id: Id; // unique id for the group
   operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
-  ioNodeGroups: NodeIOGroup[]; // a list of inputs (and corresponding outputs) that can happen during this time point
+  ioGroups: IOGroup[]; // a list of inputs (and corresponding outputs) that can happen during this time point
 };
 
-// TODO(KM): Rename to `MessageIOGroup`?
-// an operators input->outputs group
-export type NodeIOGroup = {
+// an operator's message input->outputs group
+export type IOGroup = {
   id: Id; // unique id for the group
   input?: NodeInst; // message node (command, event, timeout)
   outputs: NodeInst[]; // message nodes (command, event, timeout)
@@ -139,7 +137,7 @@ export type TimePointPath = {
   timePointId: Id;
 };
 
-export type NodeOperatorGroupPath = {
+export type OperatorGroupPath = {
   domainId: Id;
   timelineId: Id;
   conceptId: Id;
@@ -147,7 +145,7 @@ export type NodeOperatorGroupPath = {
   opGroupId: Id;
 };
 
-export type NodeIOGroupPath = {
+export type IOGroupPath = {
   domainId: Id;
   timelineId: Id;
   conceptId: Id;
@@ -159,18 +157,18 @@ export type NodeIOGroupPath = {
 // drag and drop payload types
 
 export type DragNodeInstPayload = {
-  path: NodeIOGroupPath;
+  path: IOGroupPath;
   nodeInstId: Id;
   // nodeDefId: Id; // don't really need this?
   nodeType: NodeType;
 };
 
-export type DragNodeIOGroupPayload = {
-  path: NodeOperatorGroupPath;
+export type DragIOGroupPayload = {
+  path: OperatorGroupPath;
   ioGroupId: Id;
 };
 
-export type DragNodeOperatorGroupPayload = {
+export type DragOperatorGroupPayload = {
   path: TimePointPath;
   opGroupId: Id;
 };
@@ -192,8 +190,8 @@ export type DragTimelinePayload = {
 
 export type DragPayload =
   | DragNodeInstPayload
-  | DragNodeOperatorGroupPayload
-  | DragNodeIOGroupPayload
+  | DragOperatorGroupPayload
+  | DragIOGroupPayload
   | DragTimePointPayload
   | DragConceptPayload
   | DragTimelinePayload;
@@ -209,7 +207,7 @@ export type DropNodeInstSlotType =
   | typeof NIS_OUTPUT;
 
 export type DropNodeInstPayload = {
-  path: NodeIOGroupPath;
+  path: IOGroupPath;
   slot: DropNodeInstSlotType;
   afterId: Id | undefined; // the relative sibling Id to place after if applicable
 };

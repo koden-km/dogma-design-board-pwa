@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_OP_GROUP,
-  type DragNodeIOGroupPayload,
+  type DragIOGroupPayload,
   type DragPayload,
   type Id,
   type TimelinePath,
@@ -20,7 +20,7 @@ export default function ConceptDropArea(props: ConceptDropAreaProps) {
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
-      const data = payload as DragNodeIOGroupPayload;
+      const data = payload as DragIOGroupPayload;
       console.log(
         `DEBUG(KM): dropHandler() - path=${JSON.stringify(
           path

@@ -1,10 +1,10 @@
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { NodeInst, NodeIOGroupPath } from "../../types.ts";
+import type { NodeInst, IOGroupPath } from "../../types.ts";
 import NodeCard from "../NodeCard.tsx";
 import OperatorInputDropArea from "../drop-area/OperatorInputDropArea.tsx";
 
 export interface IOGroupInputProps {
-  path: NodeIOGroupPath;
+  path: IOGroupPath;
   nodeInst?: NodeInst;
 }
 
