@@ -10,14 +10,12 @@ import {
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 
-export interface OperatorIOGroupDropAreaProps {
+export interface IOGroupDropAreaProps {
   path: TimePointPath;
   afterId: Id | undefined; // first in list if undefined
 }
 
-export default function OperatorIOGroupDropArea(
-  props: OperatorIOGroupDropAreaProps
-) {
+export default function IOGroupDropArea(props: IOGroupDropAreaProps) {
   const { path, afterId } = props;
 
   const dropHandler = useCallback(

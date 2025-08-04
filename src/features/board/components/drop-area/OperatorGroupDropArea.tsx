@@ -10,13 +10,13 @@ import {
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 
-export interface TimePointOperatorGroupDropAreaProps {
+export interface OperatorGroupDropAreaProps {
   path: TimePointPath;
   afterId: Id | undefined; // first in list if undefined
 }
 
-export default function TimePointOperatorGroupDropArea(
-  props: TimePointOperatorGroupDropAreaProps
+export default function OperatorGroupDropArea(
+  props: OperatorGroupDropAreaProps
 ) {
   const { path, afterId } = props;
 

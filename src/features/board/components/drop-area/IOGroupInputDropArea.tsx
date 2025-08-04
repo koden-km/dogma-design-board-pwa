@@ -2,22 +2,21 @@ import { useCallback } from "react";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_NODE_X,
-  NIS_OPERATOR,
+  NIS_INPUT,
   type DragNodeInstPayload,
   type DragPayload,
   type DropNodeInstPayload,
   type IOGroupPath,
-  type OperatorGroupPath,
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 import { useMoveNodeInst } from "../../hooks.ts";
 
-export interface OperatorDropAreaProps {
-  path: OperatorGroupPath;
+export interface IOGroupInputDropAreaProps {
+  path: IOGroupPath;
 }
 
-export default function OperatorDropArea(props: OperatorDropAreaProps) {
+export default function IOGroupInputDropArea(props: IOGroupInputDropAreaProps) {
   const { path } = props;
   const moveNodeInst = useMoveNodeInst();
 
@@ -27,8 +26,8 @@ export default function OperatorDropArea(props: OperatorDropAreaProps) {
       if (!source) return;
 
       const target: DropNodeInstPayload = {
-        path: path as IOGroupPath,
-        slot: NIS_OPERATOR,
+        path,
+        slot: NIS_INPUT,
         afterId: undefined,
       };
 
@@ -41,7 +40,7 @@ export default function OperatorDropArea(props: OperatorDropAreaProps) {
     (e: React.PointerEvent<HTMLButtonElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log("TODO: Add new operator node! path=", path);
+      console.log("TODO: Add new input node! path=", path);
     },
     [path]
   );
@@ -49,7 +48,7 @@ export default function OperatorDropArea(props: OperatorDropAreaProps) {
   return (
     <DropArea accepts={DDF_NODE_X} onDrop={dropHandler}>
       <NoWrap>
-        <AddButton onClick={addHandler} /> Operator
+        <AddButton onClick={addHandler} /> Operator Input
       </NoWrap>
     </DropArea>
   );

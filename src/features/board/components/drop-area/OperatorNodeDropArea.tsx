@@ -2,26 +2,23 @@ import { useCallback } from "react";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_NODE_X,
-  NIS_OUTPUT,
+  NIS_OPERATOR,
   type DragNodeInstPayload,
   type DragPayload,
   type DropNodeInstPayload,
-  type Id,
   type IOGroupPath,
+  type OperatorGroupPath,
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 import { useMoveNodeInst } from "../../hooks.ts";
 
-export interface OperatorOutputDropAreaProps {
-  path: IOGroupPath;
-  afterId: Id | undefined; // first in list if undefined
+export interface OperatorNodeDropAreaProps {
+  path: OperatorGroupPath;
 }
 
-export default function OperatorOutputDropArea(
-  props: OperatorOutputDropAreaProps
-) {
-  const { path, afterId } = props;
+export default function OperatorNodeDropArea(props: OperatorNodeDropAreaProps) {
+  const { path } = props;
   const moveNodeInst = useMoveNodeInst();
 
   const dropHandler = useCallback(
@@ -30,21 +27,21 @@ export default function OperatorOutputDropArea(
       if (!source) return;
 
       const target: DropNodeInstPayload = {
-        path,
-        slot: NIS_OUTPUT,
-        afterId,
+        path: path as IOGroupPath,
+        slot: NIS_OPERATOR,
+        afterId: undefined,
       };
 
       moveNodeInst(source, target);
     },
-    [afterId, moveNodeInst, path]
+    [moveNodeInst, path]
   );
 
   const addHandler = useCallback(
     (e: React.PointerEvent<HTMLButtonElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log("TODO: Add new output node! path=", path);
+      console.log("TODO: Add new operator node! path=", path);
     },
     [path]
   );
@@ -52,7 +49,7 @@ export default function OperatorOutputDropArea(
   return (
     <DropArea accepts={DDF_NODE_X} onDrop={dropHandler}>
       <NoWrap>
-        <AddButton onClick={addHandler} /> Operator Output
+        <AddButton onClick={addHandler} /> Operator
       </NoWrap>
     </DropArea>
   );

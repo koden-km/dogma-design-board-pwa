@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import FlexLayout from "@/components/FlexLayout.tsx";
 import { type NodeInst, type IOGroupPath } from "../../types.ts";
 import IOGroupOutput from "./IOGroupOutput.tsx";
-import OperatorOutputDropArea from "../drop-area/OperatorOutputDropArea.tsx";
+import IOGroupOutputDropArea from "../drop-area/IOGroupOutputDropArea.tsx";
 
 export interface IOGroupOutputsProps {
   path: IOGroupPath;
@@ -14,13 +14,13 @@ export default function IOGroupOutputs(props: IOGroupOutputsProps) {
 
   return (
     <FlexLayout isVertical>
-      <OperatorOutputDropArea path={path} afterId={undefined} />
+      <IOGroupOutputDropArea path={path} afterId={undefined} />
 
       {Object.values(outputs).map((nodeInst) => (
         <Fragment key={nodeInst.id}>
           <IOGroupOutput path={path} nodeInst={nodeInst} />
 
-          <OperatorOutputDropArea path={path} afterId={nodeInst.id} />
+          <IOGroupOutputDropArea path={path} afterId={nodeInst.id} />
         </Fragment>
       ))}
     </FlexLayout>

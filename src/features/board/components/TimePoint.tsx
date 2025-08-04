@@ -4,7 +4,7 @@ import type { ConceptPath, TimePoint } from "../types.ts";
 import styles from "../Board.module.css";
 import Selectable from "./Selectable.tsx";
 import OperatorGroup from "./time-point/OperatorGroup.tsx";
-import TimePointOperatorGroupDropArea from "./drop-area/TimePointOperatorGroupDropArea.tsx";
+import OperatorGroupDropArea from "./drop-area/OperatorGroupDropArea.tsx";
 import { useTimePointPath } from "../path-hooks.ts";
 
 export interface TimePointProps {
@@ -26,13 +26,13 @@ export default function TimePoint(props: TimePointProps) {
           </button>
         </div>
 
-        <TimePointOperatorGroupDropArea path={path} afterId={undefined} />
+        <OperatorGroupDropArea path={path} afterId={undefined} />
 
         {operatorGroups.map((opGroup) => (
           <Fragment key={opGroup.id}>
             <OperatorGroup path={path} group={opGroup} />
 
-            <TimePointOperatorGroupDropArea path={path} afterId={opGroup.id} />
+            <OperatorGroupDropArea path={path} afterId={opGroup.id} />
           </Fragment>
         ))}
       </FlexLayout>

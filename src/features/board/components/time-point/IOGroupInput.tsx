@@ -1,7 +1,7 @@
 import FlexLayout from "@/components/FlexLayout.tsx";
 import type { NodeInst, IOGroupPath } from "../../types.ts";
 import NodeCard from "../NodeCard.tsx";
-import OperatorInputDropArea from "../drop-area/OperatorInputDropArea.tsx";
+import IOGroupInputDropArea from "../drop-area/IOGroupInputDropArea.tsx";
 
 export interface IOGroupInputProps {
   path: IOGroupPath;
@@ -14,7 +14,7 @@ export default function IOGroupInput(props: IOGroupInputProps) {
   return (
     <FlexLayout isVertical>
       {nodeInst && <NodeCard path={path} nodeInst={nodeInst} />}
-      {!nodeInst && <OperatorInputDropArea path={path} />}
+      {!nodeInst && <IOGroupInputDropArea path={path} />}
     </FlexLayout>
   );
 }
