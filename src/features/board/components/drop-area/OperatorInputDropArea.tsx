@@ -1,39 +1,51 @@
 import { useCallback } from "react";
+import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_NODE_X,
-  type DragAndDropNodeInst,
-  type DragAndDropPayload,
-  type Id,
+  NIS_INPUT,
+  type DragNodeInstPayload,
+  type DragPayload,
+  type DropNodeInstPayload,
+  type NodeIOGroupPath,
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
-import NoWrap from "@/components/NoWrap.tsx";
+import { useMoveNodeInst } from "../../hooks.ts";
 
 export interface OperatorInputDropAreaProps {
-  groupId: Id;
+  path: NodeIOGroupPath;
 }
 
 export default function OperatorInputDropArea(
   props: OperatorInputDropAreaProps
 ) {
-  const { groupId } = props;
+  const { path } = props;
+  const moveNodeInst = useMoveNodeInst();
 
   const dropHandler = useCallback(
-    (payload: DragAndDropPayload) => {
-      const data = payload as DragAndDropNodeInst;
-      console.log(
-        `DEBUG(KM): dropHandler() - groupId=${groupId} - [${data.type}] instId=${data.instId}\ndata=`,
-        data
-      );
+    (payload: DragPayload) => {
+      const source = payload as DragNodeInstPayload;
+      if (!source) return;
+
+      const target: DropNodeInstPayload = {
+        path,
+        slot: NIS_INPUT,
+        afterId: undefined,
+      };
+
+      moveNodeInst(source, target);
     },
-    [groupId]
+    [moveNodeInst, path]
   );
 
-  const addHandler = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("TODO: Add new input node!");
-  }, []);
+  const addHandler = useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("TODO: Add new input node! path=", path);
+    },
+    [path]
+  );
 
   return (
     <DropArea accepts={DDF_NODE_X} onDrop={dropHandler}>

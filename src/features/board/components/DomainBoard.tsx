@@ -1,6 +1,7 @@
+import { useMemo } from "react";
 import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { Domain } from "../types.ts";
+import type { DomainPath, Domain } from "../types.ts";
 import styles from "../Board.module.css";
 import Timeline from "./Timeline.tsx";
 import TimelineDropArea from "./drop-area/TimelineDropArea.tsx";
@@ -11,6 +12,7 @@ export interface DomainBoardProps {
 
 export default function DomainBoard(props: DomainBoardProps) {
   const { id, comment, name, timelines } = props.domain;
+  const path = useMemo<DomainPath>(() => ({ domainId: id }), [id]);
 
   return (
     <div>
@@ -28,7 +30,7 @@ export default function DomainBoard(props: DomainBoardProps) {
 
         {timelines.map((timeline) => (
           <Fragment key={timeline.id}>
-            <Timeline timeline={timeline} />
+            <Timeline path={path} timeline={timeline} />
 
             <TimelineDropArea domainId={id} afterId={timeline.id} />
           </Fragment>

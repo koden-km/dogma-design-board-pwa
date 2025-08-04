@@ -3,14 +3,25 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { v4 as uuidv4 } from "uuid";
 import { TT_POINTER, type ToolType } from "@/features/toolbar/types.ts";
 import {
+  NIS_INPUT,
+  NIS_OPERATOR,
   NT_AGGREGATE,
   NT_COMMAND,
   NT_EVENT,
   NT_PROCESS,
   NT_TIMEOUT,
   NT_VIEW,
+  type Concept,
   type Domain,
+  type DragNodeInstPayload,
+  type DropNodeInstPayload,
   type Id,
+  type NodeInst,
+  type NodeIOGroup,
+  type NodeIOGroupPath,
+  type NodeOperatorGroup,
+  type Timeline,
+  type TimePoint,
 } from "./types.ts";
 import {
   createConcept,
@@ -356,24 +367,6 @@ const slice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    selectId: (state, action: PayloadAction<{ id: Id }>) => {
-      const { payload } = action;
-      state.selectedId = payload.id;
-    },
-
-    switchTool: (state, action: PayloadAction<{ tool: ToolType }>) => {
-      const { payload } = action;
-      state.currentTool = payload.tool;
-    },
-
-    switchDomain: (state, action: PayloadAction<{ domainId: Id }>) => {
-      const { payload } = action;
-      const domainId = payload.domainId;
-      if (state.domains[domainId]) {
-        state.currentDomainId = domainId;
-      }
-    },
-
     addDomain: (
       state,
       action: PayloadAction<{
@@ -381,8 +374,7 @@ const slice = createSlice({
         name: string;
       }>
     ) => {
-      const { payload } = action;
-      const { id = uuidv4(), name } = payload;
+      const { id = uuidv4(), name } = action.payload;
       state.domains[id] = createDomain(id, name);
     },
 
@@ -410,8 +402,224 @@ const slice = createSlice({
         state.domains[domain.id] = domain;
       });
     },
+
+    moveNodeInst: (
+      state,
+      action: PayloadAction<{
+        source: DragNodeInstPayload;
+        target: DropNodeInstPayload;
+      }>
+    ) => {
+      const { source, target } = action.payload;
+      const sp = source.path;
+      const tp = target.path;
+      const sourceDomain = state.domains[sp.domainId];
+      const targetDomain = state.domains[tp.domainId];
+
+      const nodeInstId = source.nodeInstId;
+      const nodeInst = getNodeInstFromPath(sourceDomain, sp, nodeInstId);
+      if (!nodeInst) {
+        console.warn("Node Instance not found in path.");
+        return;
+      }
+
+      const removeFromSource = () => {
+        if (sp.ioGroupId === undefined) {
+          const sourceOpGroup = getOperatorGroupFromPath(sourceDomain, sp)!;
+          sourceOpGroup.operatorNode = undefined;
+        } else {
+          const sourceIOGroup = getIOGroupFromPath(sourceDomain, sp)!;
+          if (sourceIOGroup.input?.id === nodeInstId) {
+            sourceIOGroup.input = undefined;
+          } else {
+            sourceIOGroup.outputs = sourceIOGroup.outputs.filter(
+              ({ id }) => id !== nodeInstId
+            );
+          }
+        }
+      };
+
+      // first remove from source (known to exist), then add to target
+      if (target.slot === NIS_OPERATOR && tp.ioGroupId === undefined) {
+        // its an opt group
+        const targetOpGroup = getOperatorGroupFromPath(targetDomain, tp);
+        if (!targetOpGroup) {
+          console.warn("Target Operator Group not found in path.");
+          return;
+        }
+
+        removeFromSource();
+        targetOpGroup.operatorNode = nodeInst;
+      } else {
+        // its an io group
+        const targetIOGroup = getIOGroupFromPath(targetDomain, tp);
+        if (!targetIOGroup) {
+          console.warn("Target IO Group not found in path.");
+          return;
+        }
+
+        removeFromSource();
+
+        if (target.slot === NIS_INPUT) {
+          targetIOGroup.input = nodeInst;
+        } else {
+          const outputs = targetIOGroup.outputs;
+          const afterId = target.afterId;
+          const afterIndex = outputs.findIndex(({ id }) => id === afterId);
+          if (afterIndex === -1) {
+            targetIOGroup.outputs.splice(0, 0, nodeInst);
+          } else {
+            targetIOGroup.outputs.splice(afterIndex + 1, 0, nodeInst);
+          }
+        }
+      }
+    },
+
+    selectId: (state, action: PayloadAction<{ id: Id }>) => {
+      state.selectedId = action.payload.id;
+    },
+
+    switchTool: (state, action: PayloadAction<{ tool: ToolType }>) => {
+      state.currentTool = action.payload.tool;
+    },
+
+    switchDomain: (state, action: PayloadAction<{ domainId: Id }>) => {
+      const domainId = action.payload.domainId;
+      if (state.domains[domainId]) {
+        state.currentDomainId = domainId;
+      }
+    },
   },
 });
 
-export const { selectId, switchDomain, switchTool } = slice.actions;
+export const { moveNodeInst, selectId, switchDomain, switchTool } =
+  slice.actions;
 export default slice;
+
+// helpers...
+
+function getNodeInstFromPath(
+  domain: Domain,
+  path: NodeIOGroupPath,
+  nodeInstId: Id
+): NodeInst | undefined {
+  const opGroup = getOperatorGroupFromPath(domain, path);
+  if (!opGroup) return undefined;
+
+  return getNodeInstFromOperatorGroup(opGroup, nodeInstId);
+}
+
+function getOperatorGroupFromPath(
+  domain: Domain,
+  path: NodeIOGroupPath
+): NodeOperatorGroup | undefined {
+  const { timelineId, conceptId, timePointId, opGroupId } = path;
+
+  const timeline = getTimelineFromDomain(domain, timelineId);
+  if (!timeline) return undefined;
+
+  const concept = getConceptFromTimeline(timeline, conceptId);
+  if (!concept) return undefined;
+
+  const timePoint = getTimePointFromConcept(concept, timePointId);
+  if (!timePoint) return undefined;
+
+  return getOperatorGroupFromTimePoint(timePoint, opGroupId);
+}
+
+function getIOGroupFromPath(
+  domain: Domain,
+  path: NodeIOGroupPath
+): NodeIOGroup | undefined {
+  const opGroup = getOperatorGroupFromPath(domain, path);
+  if (!opGroup) return undefined;
+
+  return getIOGroupFromOperatorGroup(opGroup, path.ioGroupId);
+}
+
+function getNodeInstFromOperatorGroup(
+  opGroup: NodeOperatorGroup,
+  nodeInstId: Id
+): NodeInst | undefined {
+  if (opGroup.operatorNode?.id === nodeInstId) {
+    return opGroup.operatorNode;
+  }
+
+  return getNodeInstFromIOGroups(opGroup.ioNodeGroups, nodeInstId);
+}
+
+function getNodeInstFromIOGroups(
+  ioGroups: NodeIOGroup[],
+  nodeInstId: Id
+): NodeInst | undefined {
+  for (let ioGroupIndex = 0; ioGroupIndex < ioGroups.length; ioGroupIndex++) {
+    const nodeInst = getNodeInstFromIOGroup(ioGroups[ioGroupIndex], nodeInstId);
+    if (nodeInst) return nodeInst;
+  }
+
+  return undefined;
+}
+
+function getNodeInstFromIOGroup(
+  ioGroup: NodeIOGroup,
+  nodeInstId: Id
+): NodeInst | undefined {
+  if (ioGroup.input?.id === nodeInstId) {
+    return ioGroup.input;
+  }
+
+  const outputs = ioGroup.outputs;
+  for (let outputIndex = 0; outputIndex < outputs.length; outputIndex++) {
+    const output = outputs[outputIndex];
+    if (output.id === nodeInstId) {
+      return output;
+    }
+  }
+
+  return undefined;
+}
+
+function getTimelineFromDomain(
+  domain: Domain,
+  timelineId: Id
+): Timeline | undefined {
+  return domain.timelines.find(({ id }) => id === timelineId) as Timeline;
+}
+
+function getConceptFromTimeline(
+  timeline: Timeline,
+  conceptId: Id
+): Concept | undefined {
+  return timeline.concepts.find(({ id }) => id === conceptId) as Concept;
+}
+
+function getTimePointFromConcept(
+  concept: Concept,
+  timePointId: Id
+): TimePoint | undefined {
+  return concept.timePoints.find(({ id }) => id === timePointId) as TimePoint;
+}
+
+function getOperatorGroupFromTimePoint(
+  timePoint: TimePoint,
+  opGroupId: Id
+): NodeOperatorGroup | undefined {
+  return timePoint.operatorGroups.find(
+    ({ id }) => id === opGroupId
+  ) as NodeOperatorGroup;
+}
+
+function getIOGroupFromOperatorGroup(
+  opGroup: NodeOperatorGroup,
+  ioGroupId: Id
+): NodeIOGroup | undefined {
+  const ioGroups = opGroup.ioNodeGroups;
+  for (let ioGroupIndex = 0; ioGroupIndex < ioGroups.length; ioGroupIndex++) {
+    const ioGroup = ioGroups[ioGroupIndex];
+    if (ioGroup.id === ioGroupId) {
+      return ioGroup;
+    }
+  }
+
+  return undefined;
+}

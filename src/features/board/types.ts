@@ -1,22 +1,5 @@
 export type Id = string;
 
-// a key-value plain object map, eg. map<Id,NodeDef>
-export type NodeDefMap = {
-  [key: Id]: NodeDef;
-};
-
-export type NodeIOGroup = {
-  id: Id; // unique id for the group
-  input?: NodeInst; // message node (command, event, timeout)
-  outputs: NodeInst[]; // message nodes (command, event, timeout)
-};
-
-export type NodeOperatorGroup = {
-  id: Id; // unique id for the group
-  operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
-  ioNodeGroups: NodeIOGroup[]; // a list of inputs (and corresponding outputs) that can happen during this time point
-};
-
 export type Domain = {
   id: Id;
   name: string;
@@ -24,6 +7,11 @@ export type Domain = {
   issueThreads: { [key: Id]: IssueThread };
   timelines: Timeline[]; // a list of concurrent timelines to model things occurring at similar but unrelated time points
   nodesDefinitions: NodeDefMap;
+};
+
+// a key-value plain object map, eg. map<Id,NodeDef>
+export type NodeDefMap = {
+  [key: Id]: NodeDef;
 };
 
 export type IssueThread = {
@@ -58,6 +46,22 @@ export type Concept = {
 export type TimePoint = {
   id: Id;
   operatorGroups: NodeOperatorGroup[]; // a list of operator node groups to model concurrent operations during this time point
+};
+
+// TODO(KM): Drop the `Node` prefix? Rename to `HandlerGroup`?
+// an operator and all its groups of input->outputs
+export type NodeOperatorGroup = {
+  id: Id; // unique id for the group
+  operatorNode?: NodeInst; // operator nodes (aggregate, process, integration, projection, view)
+  ioNodeGroups: NodeIOGroup[]; // a list of inputs (and corresponding outputs) that can happen during this time point
+};
+
+// TODO(KM): Rename to `MessageIOGroup`?
+// an operators input->outputs group
+export type NodeIOGroup = {
+  id: Id; // unique id for the group
+  input?: NodeInst; // message node (command, event, timeout)
+  outputs: NodeInst[]; // message nodes (command, event, timeout)
 };
 
 // node definition
@@ -111,41 +115,107 @@ export type OperatorType =
   | typeof NT_PROJECTION
   | typeof NT_VIEW;
 
-// drag and drop types
+// drag and drop path types
 
-export type DragAndDropNodeInst = {
+export type DomainPath = {
   domainId: Id;
-  defId: Id;
-  instId: Id;
-  type: NodeType;
 };
 
-export type DragAndDropNodeOperatorGroup = {
-  domainId: Id;
-  timePointId: Id;
-};
-
-export type DragAndDropNodeIOGroup = {
-  domainId: Id;
-  timePointId: Id;
-};
-
-export type DragAndDropTimePoint = {
-  domainId: Id;
-  timePointId: Id;
-};
-
-export type DragAndDropConcept = {
-  domainId: Id;
-  conceptId: Id;
-};
-
-export type DragAndDropTimeline = {
+export type TimelinePath = {
   domainId: Id;
   timelineId: Id;
 };
 
+export type ConceptPath = {
+  domainId: Id;
+  timelineId: Id;
+  conceptId: Id;
+};
+
+export type TimePointPath = {
+  domainId: Id;
+  timelineId: Id;
+  conceptId: Id;
+  timePointId: Id;
+};
+
+export type NodeOperatorGroupPath = {
+  domainId: Id;
+  timelineId: Id;
+  conceptId: Id;
+  timePointId: Id;
+  opGroupId: Id;
+};
+
+export type NodeIOGroupPath = {
+  domainId: Id;
+  timelineId: Id;
+  conceptId: Id;
+  timePointId: Id;
+  opGroupId: Id;
+  ioGroupId: Id;
+};
+
+// drag and drop payload types
+
+export type DragNodeInstPayload = {
+  path: NodeIOGroupPath;
+  nodeInstId: Id;
+  // nodeDefId: Id; // don't really need this?
+  nodeType: NodeType;
+};
+
+export type DragNodeIOGroupPayload = {
+  path: NodeOperatorGroupPath;
+  ioGroupId: Id;
+};
+
+export type DragNodeOperatorGroupPayload = {
+  path: TimePointPath;
+  opGroupId: Id;
+};
+
+export type DragTimePointPayload = {
+  path: ConceptPath;
+  timePointId: Id;
+};
+
+export type DragConceptPayload = {
+  path: TimelinePath;
+  conceptId: Id;
+};
+
+export type DragTimelinePayload = {
+  path: DomainPath;
+  timelineId: Id;
+};
+
+export type DragPayload =
+  | DragNodeInstPayload
+  | DragNodeOperatorGroupPayload
+  | DragNodeIOGroupPayload
+  | DragTimePointPayload
+  | DragConceptPayload
+  | DragTimelinePayload;
+
+// node instance slot types
+export const NIS_OPERATOR = "operator";
+export const NIS_INPUT = "input";
+export const NIS_OUTPUT = "output";
+
+export type DropNodeInstSlotType =
+  | typeof NIS_OPERATOR
+  | typeof NIS_INPUT
+  | typeof NIS_OUTPUT;
+
+export type DropNodeInstPayload = {
+  path: NodeIOGroupPath;
+  slot: DropNodeInstSlotType;
+  afterId: Id | undefined; // the relative sibling Id to place after if applicable
+};
+
 // drag and drop data format types
+
 export const DDF_NODE_X = "application/board-node-x";
 export const DDF_OP_GROUP = "application/board-op-group";
 export const DDF_IO_GROUP = "application/board-io-group";
@@ -160,11 +230,3 @@ export type DragAndDropFormatType =
   | typeof DDF_TIME_POINT
   | typeof DDF_CONCEPT
   | typeof DDF_TIMELINE;
-
-export type DragAndDropPayload =
-  | DragAndDropNodeInst
-  | DragAndDropNodeOperatorGroup
-  | DragAndDropNodeIOGroup
-  | DragAndDropTimePoint
-  | DragAndDropConcept
-  | DragAndDropTimeline;

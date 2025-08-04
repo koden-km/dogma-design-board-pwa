@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { Timeline } from "../types.ts";
+import type { Timeline, DomainPath } from "../types.ts";
 import styles from "../Board.module.css";
 import Concept from "./Concept.tsx";
 import Selectable from "./Selectable.tsx";
 import ConceptDropArea from "./drop-area/ConceptDropArea.tsx";
+import { useTimelinePath } from "../path-hooks.ts";
 
 export interface TimelineProps {
+  path: DomainPath;
   timeline: Timeline;
 }
 
 export default function Timeline(props: TimelineProps) {
   const { id, concepts } = props.timeline;
+  const path = useTimelinePath(props.path, id);
   const [isVisible, setIsVisible] = useState(true);
 
   const handleVisibleToggle = (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -41,13 +44,13 @@ export default function Timeline(props: TimelineProps) {
 
         {isVisible && (
           <FlexLayout isHorizontal>
-            <ConceptDropArea timelineId={id} afterId={undefined} />
+            <ConceptDropArea path={path} afterId={undefined} />
 
             {concepts.map((concept) => (
               <Fragment key={concept.id}>
-                <Concept concept={concept} />
+                <Concept path={path} concept={concept} />
 
-                <ConceptDropArea timelineId={id} afterId={concept.id} />
+                <ConceptDropArea path={path} afterId={concept.id} />
               </Fragment>
             ))}
           </FlexLayout>

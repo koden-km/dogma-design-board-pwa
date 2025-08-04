@@ -1,16 +1,23 @@
 import { useEffect, useRef } from "react";
 import Card from "@/features/card/Card.tsx";
-import { DDF_NODE_X, type NodeInst } from "../types.ts";
+import {
+  DDF_NODE_X,
+  type NodeInst,
+  type NodeIOGroupPath,
+  type NodeOperatorGroupPath,
+} from "../types.ts";
 import { useCurrentDomain, useDomainName, useDomainNodeDef } from "../hooks.ts";
-import { createDnDNodeInst } from "../util.ts";
 import Selectable from "./Selectable.tsx";
+import { packDnDNodeInst } from "../util.ts";
 
 export interface NodeCardProps {
+  path: NodeOperatorGroupPath | NodeIOGroupPath;
   nodeInst: NodeInst;
 }
 
 export default function NodeCard(props: NodeCardProps) {
-  const { comment, domainId, defId, id } = props.nodeInst;
+  const { path, nodeInst } = props;
+  const { comment, domainId, defId, id } = nodeInst;
   const { name, type } = useDomainNodeDef(domainId, defId);
   const currentDomain = useCurrentDomain();
   const domainName = useDomainName(domainId);
@@ -26,7 +33,7 @@ export default function NodeCard(props: NodeCardProps) {
       if (e.dataTransfer) {
         e.dataTransfer.setData(
           DDF_NODE_X,
-          createDnDNodeInst(domainId, defId, id, type)
+          packDnDNodeInst(path as NodeIOGroupPath, id, type)
         );
         e.dataTransfer.effectAllowed = "move";
       }
@@ -37,7 +44,7 @@ export default function NodeCard(props: NodeCardProps) {
     return () => {
       elRef.removeEventListener("dragstart", dragStartHandler);
     };
-  }, [domainId, defId, id, ref, type]);
+  }, [path, id, ref, type]);
 
   return (
     <div ref={ref} draggable>

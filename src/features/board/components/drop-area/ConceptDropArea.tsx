@@ -1,38 +1,44 @@
 import { useCallback } from "react";
+import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_OP_GROUP,
-  type DragAndDropNodeIOGroup,
-  type DragAndDropPayload,
+  type DragNodeIOGroupPayload,
+  type DragPayload,
   type Id,
+  type TimelinePath,
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
-import NoWrap from "@/components/NoWrap.tsx";
 
 export interface ConceptDropAreaProps {
-  timelineId: Id;
+  path: TimelinePath;
   afterId: Id | undefined; // first in list if undefined
 }
 
 export default function ConceptDropArea(props: ConceptDropAreaProps) {
-  const { timelineId, afterId } = props;
+  const { path, afterId } = props;
 
   const dropHandler = useCallback(
-    (payload: DragAndDropPayload) => {
-      const data = payload as DragAndDropNodeIOGroup;
+    (payload: DragPayload) => {
+      const data = payload as DragNodeIOGroupPayload;
       console.log(
-        `DEBUG(KM): dropHandler() - timelineId=${timelineId} afterId=${afterId}\ndata=`,
+        `DEBUG(KM): dropHandler() - path=${JSON.stringify(
+          path
+        )} afterId=${afterId}\ndata=`,
         data
       );
     },
-    [timelineId, afterId]
+    [path, afterId]
   );
 
-  const addHandler = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    console.log("TODO: Add new concept!");
-  }, []);
+  const addHandler = useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log(`TODO: Add new concept! afterId=${afterId} path=`, path);
+    },
+    [afterId, path]
+  );
 
   return (
     <DropArea accepts={DDF_OP_GROUP} onDrop={dropHandler}>

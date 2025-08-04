@@ -9,7 +9,7 @@ import {
   DDF_TIME_POINT,
   DDF_TIMELINE,
   type DragAndDropFormatType,
-  type DragAndDropPayload,
+  type DragPayload,
 } from "../../types.ts";
 import {
   unpackDnDNodeInst,
@@ -23,7 +23,7 @@ import {
 export interface DropAreaProps {
   children?: React.ReactNode;
   accepts: DragAndDropFormatType;
-  onDrop: (data: DragAndDropPayload) => void;
+  onDrop: (data: DragPayload) => void;
 }
 
 export default function DropArea(props: DropAreaProps) {

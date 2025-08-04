@@ -1,24 +1,30 @@
 import { v4 as uuidv4 } from "uuid";
 import {
   type Concept,
+  type TimelinePath,
   type Domain,
-  type DragAndDropConcept,
-  type DragAndDropNodeIOGroup,
-  type DragAndDropNodeInst,
-  type DragAndDropNodeOperatorGroup,
-  type DragAndDropTimePoint,
-  type DragAndDropTimeline,
+  type DragConceptPayload,
+  type DragNodeIOGroupPayload,
+  type DragNodeInstPayload,
+  type DragNodeOperatorGroupPayload,
+  type DragTimePointPayload,
+  type DragTimelinePayload,
   type Id,
   type IssueComment,
   type IssueThread,
   type NodeDef,
   type NodeDefMap,
   type NodeIOGroup,
+  type NodeOperatorGroupPath,
   type NodeInst,
+  type NodeIOGroupPath,
   type NodeOperatorGroup,
+  type TimePointPath,
   type NodeType,
   type TimePoint,
+  type ConceptPath,
   type Timeline,
+  type DomainPath,
 } from "./types.ts";
 
 export function createDomain(
@@ -172,70 +178,64 @@ export function createNodeInst(
 
 // drag and drop
 
-// TODO(KM): Rename these to "packDnDXxxx"?
-
-export function createDnDNodeInst(
-  domainId: Id,
-  defId: Id,
-  instId: Id,
+export function packDnDNodeInst(
+  path: NodeIOGroupPath,
+  nodeInstId: Id,
   type: NodeType
 ): string {
-  // return createDnDElement(DDT_NODE, { domainId, defId, instId, type });
-  return JSON.stringify({ domainId, defId, instId, type });
+  return JSON.stringify({ path, nodeInstId, type });
 }
 
-export function createDnDNodeOperatorGroup(
-  domainId: Id,
-  timePointId: Id
+export function packDnDNodeIOGroup(
+  path: NodeOperatorGroupPath,
+  ioGroupId: Id
 ): string {
-  // return createDnDElement(DDT_OP_GROUP, { domainId, timePointId });
-  return JSON.stringify({ domainId, timePointId });
+  return JSON.stringify({ path, ioGroupId });
 }
 
-export function createDnDNodeIOGroup(domainId: Id, timePointId: Id): string {
-  // return createDnDElement(DDT_IO_GROUP, { domainId, timePointId });
-  return JSON.stringify({ domainId, timePointId });
+export function packDnDNodeOperatorGroup(
+  path: TimePointPath,
+  opGroupId: Id
+): string {
+  return JSON.stringify({ path, opGroupId });
 }
 
-export function createDnDTimePoint(domainId: Id, timePointId: Id): string {
-  // return createDnDElement(DDT_TIME_POINT, { domainId, timePointId });
-  return JSON.stringify({ domainId, timePointId });
+export function packDnDTimePoint(path: ConceptPath, timePointId: Id): string {
+  return JSON.stringify({ path, timePointId });
 }
 
-export function createDnDConcept(domainId: Id, conceptId: Id): string {
-  // return createDnDElement(DDT_CONCEPT, { domainId, conceptId });
-  return JSON.stringify({ domainId, conceptId });
+export function packDnDConcept(path: TimelinePath, conceptId: Id): string {
+  return JSON.stringify({ path, conceptId });
 }
 
-export function createDnDTimeline(domainId: Id, timelineId: Id): string {
-  // return createDnDElement(DDT_TIMELINE, { domainId, timelineId });
-  return JSON.stringify({ domainId, timelineId });
+export function packDnDTimeline(path: DomainPath, timelineId: Id): string {
+  return JSON.stringify({ path, timelineId });
 }
 
-export function unpackDnDNodeInst(jsonData: string): DragAndDropNodeInst {
+export function unpackDnDNodeInst(jsonData: string): DragNodeInstPayload {
   return JSON.parse(jsonData);
 }
 
 export function unpackDnDNodeOperatorGroup(
   jsonData: string
-): DragAndDropNodeOperatorGroup {
+): DragNodeOperatorGroupPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeIOGroup(jsonData: string): DragAndDropNodeIOGroup {
+export function unpackDnDNodeIOGroup(jsonData: string): DragNodeIOGroupPayload {
   return JSON.parse(jsonData);
 }
 
 export function unpackDnDNodeIOTimePoint(
   jsonData: string
-): DragAndDropTimePoint {
+): DragTimePointPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeIOConcept(jsonData: string): DragAndDropConcept {
+export function unpackDnDNodeIOConcept(jsonData: string): DragConceptPayload {
   return JSON.parse(jsonData);
 }
 
-export function unpackDnDNodeIOTimeline(jsonData: string): DragAndDropTimeline {
+export function unpackDnDNodeIOTimeline(jsonData: string): DragTimelinePayload {
   return JSON.parse(jsonData);
 }

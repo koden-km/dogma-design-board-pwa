@@ -2,12 +2,13 @@ import { useCallback, useMemo } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks.js";
 import { type ToolType } from "@/features/toolbar/types.ts";
 import slice, {
+  moveNodeInst,
   selectId,
   switchDomain,
   switchTool,
   type BoardState,
 } from "./slice.ts";
-import type { Id } from "./types.ts";
+import type { DragNodeInstPayload, DropNodeInstPayload, Id } from "./types.ts";
 
 export const useCurrentDomainId = () => useSelector().currentDomainId;
 export const useCurrentTool = () => useSelector().currentTool;
@@ -35,9 +36,18 @@ export const useDomainList = () => {
   return useMemo(() => Object.values(domains), [domains]);
 };
 
+export const useMoveNodeInst = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (source: DragNodeInstPayload, target: DropNodeInstPayload) => {
+      dispatch(moveNodeInst({ source, target }));
+    },
+    [dispatch]
+  );
+};
+
 export const useSelectId = (id: Id) => {
   const dispatch = useAppDispatch();
-
   return useCallback(() => {
     dispatch(selectId({ id }));
   }, [id, dispatch]);
@@ -45,7 +55,6 @@ export const useSelectId = (id: Id) => {
 
 export const useSwitchDomain = (domainId: Id) => {
   const dispatch = useAppDispatch();
-
   return useCallback(() => {
     dispatch(switchDomain({ domainId }));
   }, [domainId, dispatch]);
@@ -53,7 +62,6 @@ export const useSwitchDomain = (domainId: Id) => {
 
 export const useSwitchTool = (tool: ToolType) => {
   const dispatch = useAppDispatch();
-
   return useCallback(() => {
     dispatch(switchTool({ tool }));
   }, [tool, dispatch]);

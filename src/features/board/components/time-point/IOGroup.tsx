@@ -1,22 +1,25 @@
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { NodeIOGroup } from "../../types.ts";
+import type { NodeIOGroup, NodeOperatorGroupPath } from "../../types.ts";
 import styles from "./TimePoint.module.css";
 import Selectable from "../Selectable.tsx";
 import IOGroupInput from "./IOGroupInput.tsx";
 import IOGroupOutputs from "./IOGroupOutputs.tsx";
+import { useIOGroupPath } from "../../path-hooks.ts";
 
 export interface IOGroupProps {
+  path: NodeOperatorGroupPath;
   group: NodeIOGroup;
 }
 
 export default function IOGroup(props: IOGroupProps) {
   const { id, input, outputs } = props.group;
+  const path = useIOGroupPath(props.path, id);
 
   return (
     <Selectable id={id}>
       <FlexLayout isDraggable isHorizontal className={styles.ioGroup}>
-        <IOGroupInput groupId={id} nodeInst={input} />
-        <IOGroupOutputs groupId={id} outputs={outputs} />
+        <IOGroupInput path={path} nodeInst={input} />
+        <IOGroupOutputs path={path} outputs={outputs} />
       </FlexLayout>
     </Selectable>
   );

@@ -1,17 +1,20 @@
 import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
-import type { TimePoint } from "../types.ts";
+import type { ConceptPath, TimePoint } from "../types.ts";
 import styles from "../Board.module.css";
-import OperatorGroup from "./time-point/OperatorGroup.tsx";
 import Selectable from "./Selectable.tsx";
+import OperatorGroup from "./time-point/OperatorGroup.tsx";
 import TimePointOperatorGroupDropArea from "./drop-area/TimePointOperatorGroupDropArea.tsx";
+import { useTimePointPath } from "../path-hooks.ts";
 
 export interface TimePointProps {
+  path: ConceptPath;
   timePoint: TimePoint;
 }
 
 export default function TimePoint(props: TimePointProps) {
   const { id, operatorGroups } = props.timePoint;
+  const path = useTimePointPath(props.path, id);
 
   return (
     <Selectable id={id}>
@@ -23,16 +26,13 @@ export default function TimePoint(props: TimePointProps) {
           </button>
         </div>
 
-        <TimePointOperatorGroupDropArea timePointId={id} afterId={undefined} />
+        <TimePointOperatorGroupDropArea path={path} afterId={undefined} />
 
         {operatorGroups.map((opGroup) => (
           <Fragment key={opGroup.id}>
-            <OperatorGroup group={opGroup} />
+            <OperatorGroup path={path} group={opGroup} />
 
-            <TimePointOperatorGroupDropArea
-              timePointId={id}
-              afterId={opGroup.id}
-            />
+            <TimePointOperatorGroupDropArea path={path} afterId={opGroup.id} />
           </Fragment>
         ))}
       </FlexLayout>

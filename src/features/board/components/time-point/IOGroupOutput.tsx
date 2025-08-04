@@ -1,13 +1,13 @@
-import { type Id, type NodeInst } from "../../types.ts";
+import { type NodeInst, type NodeIOGroupPath } from "../../types.ts";
 import NodeCard from "../NodeCard.tsx";
 
 export interface IOGroupOutputProps {
-  groupId: Id;
+  path: NodeIOGroupPath;
   nodeInst: NodeInst;
 }
 
 export default function IOGroupOutput(props: IOGroupOutputProps) {
-  const { nodeInst } = props;
+  const { path, nodeInst } = props;
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function IOGroupOutput(props: IOGroupOutputProps) {
         <button type="button">Remove Operator Output</button>
       </div> */}
 
-      <NodeCard nodeInst={nodeInst} />
+      <NodeCard path={path} nodeInst={nodeInst} />
     </>
   );
 }
