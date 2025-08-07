@@ -52,7 +52,7 @@ export default function OperatorGroupDropArea(
   return (
     <DropArea accepts={DDF_OP_GROUP} onDrop={dropHandler}>
       <NoWrap>
-        <AddButton onClick={addHandler} /> Operator Group
+        <AddButton onClick={addHandler} /> Message Handler Group
       </NoWrap>
     </DropArea>
   );

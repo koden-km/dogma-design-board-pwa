@@ -48,7 +48,7 @@ export default function IOGroupInputDropArea(props: IOGroupInputDropAreaProps) {
   return (
     <DropArea accepts={DDF_NODE_X} onDrop={dropHandler}>
       <NoWrap>
-        <AddButton onClick={addHandler} /> Operator Input
+        <AddButton onClick={addHandler} /> Input Message
       </NoWrap>
     </DropArea>
   );

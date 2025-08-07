@@ -47,7 +47,7 @@ export default function IOGroupDropArea(props: IOGroupDropAreaProps) {
   return (
     <DropArea accepts={DDF_IO_GROUP} onDrop={dropHandler}>
       <NoWrap>
-        <AddButton onClick={addHandler} /> IO Group
+        <AddButton onClick={addHandler} /> Handler IO Group
       </NoWrap>
     </DropArea>
   );

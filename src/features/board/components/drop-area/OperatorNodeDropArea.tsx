@@ -49,7 +49,7 @@ export default function OperatorNodeDropArea(props: OperatorNodeDropAreaProps) {
   return (
     <DropArea accepts={DDF_NODE_X} onDrop={dropHandler}>
       <NoWrap>
-        <AddButton onClick={addHandler} /> Operator
+        <AddButton onClick={addHandler} /> Message Handler
       </NoWrap>
     </DropArea>
   );

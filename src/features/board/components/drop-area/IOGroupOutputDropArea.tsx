@@ -52,7 +52,7 @@ export default function IOGroupOutputDropArea(
   return (
     <DropArea accepts={DDF_NODE_X} onDrop={dropHandler}>
       <NoWrap>
-        <AddButton onClick={addHandler} /> Operator Output
+        <AddButton onClick={addHandler} /> Output Message
       </NoWrap>
     </DropArea>
   );
