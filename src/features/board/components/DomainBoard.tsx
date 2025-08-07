@@ -15,7 +15,7 @@ export default function DomainBoard(props: DomainBoardProps) {
   const path = useMemo<DomainPath>(() => ({ domainId: id }), [id]);
 
   return (
-    <div>
+    <div className={styles.board}>
       <div className={styles.header}>
         <h2>{name}</h2>
         <div className={styles.headerComment}>{comment}</div>
