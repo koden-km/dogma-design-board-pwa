@@ -2,14 +2,18 @@
 
 DDD event storming board for Dogmatiq applications.
 
-## Usage: Run dev server
+https://koden-km.github.io/dogma-design-board-pwa/
+
+## Dev
+
+### Run dev server
 
 ```shell
 npm install
 npm run dev
 ```
 
-## Usage: Run tests
+### Run tests
 
 **Once**
 
