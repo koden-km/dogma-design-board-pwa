@@ -78,12 +78,12 @@ function generateGoMessageFileHeader(packageName: string): string {
   return `package ${packageName}
 
 import (
-	"errors"
-	"fmt"
-	"time"
+\t"errors"
+\t"fmt"
+\t"time"
 
-	"github.com/dogmatiq/dogma"
-	"github.com/dogmatiq/example/messages"
+\t"github.com/dogmatiq/dogma"
+\t//"github.com/example-org/example-service/messages"
 )
 `;
 }
@@ -92,18 +92,17 @@ import (
 function generateGoMessageStruct(nodeDef: NodeDef): string {
   const structName = safeStructNameGo(nodeDef.name);
 
-  return `
-// ${structName} ${nodeDef.type} message.
+  return `// ${structName} ${nodeDef.type} message.
 type ${structName} struct {}
 
 // MessageDescription returns a human-readable description of the message.
 func (m ${structName}) MessageDescription() string {
-	return "TODO: message description!"
+\treturn "TODO: message description!"
 }
 
 // Validate returns a non-nil error if the message is invalid.
 func (m ${structName}) Validate(dogma.${validationScopeType(nodeDef)}) error {
-	return nil
+\treturn nil
 }
 `;
 }
@@ -120,8 +119,7 @@ package ${packageName};
 function generateProtoMessageStruct(nodeDef: NodeDef): string {
   const structName = safeStructNameProto(nodeDef.name);
 
-  return `
-// ${structName} ${nodeDef.type} message.
+  return `// ${structName} ${nodeDef.type} message.
 message ${structName} {}
 `;
 }
