@@ -27,7 +27,15 @@ import type {
   DropTimelinePayload,
   DropTimePointPayload,
   Id,
+  NodeInst,
 } from "./types.ts";
+import {
+  downloadFile,
+  generateGoFileNodeDef,
+  generateProtoFileNodeDef,
+  safeFilenameGo,
+  safeFilenameProto,
+} from "./export-util.ts";
 
 export const useCurrentDomainId = () => useSelector().currentDomainId;
 export const useCurrentTool = () => useSelector().currentTool;
@@ -53,6 +61,34 @@ export const useCurrentDomain = () => {
 export const useDomainList = () => {
   const domains = useSelector().domains;
   return useMemo(() => Object.values(domains), [domains]);
+};
+
+export const useExportNodeDef = (nodeInst: NodeInst) => {
+  const domain = useDomainWithId(nodeInst.domainId);
+  const nodeDef = useDomainNodeDef(nodeInst.domainId, nodeInst.defId);
+
+  return useCallback(
+    (e: React.PointerEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (!nodeDef) {
+        console.warn("No Node Def not found.");
+        return;
+      }
+
+      downloadFile(
+        safeFilenameGo(nodeDef.name),
+        generateGoFileNodeDef(domain, nodeDef)
+      );
+
+      downloadFile(
+        safeFilenameProto(nodeDef.name),
+        generateProtoFileNodeDef(domain, nodeDef)
+      );
+    },
+    [nodeDef]
+  );
 };
 
 export const useMoveNodeInst = () => {

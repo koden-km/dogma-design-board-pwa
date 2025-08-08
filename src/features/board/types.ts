@@ -76,15 +76,15 @@ export type NodeInst = {
 };
 
 // node types
-export const NT_AGGREGATE = "aggregate" as const;
-export const NT_COMMAND = "command" as const;
-export const NT_EVENT = "event" as const;
-export const NT_INTEGRATION = "integration" as const;
-export const NT_ISSUE = "issue" as const;
-export const NT_PROCESS = "process" as const;
-export const NT_PROJECTION = "projection" as const;
-export const NT_TIMEOUT = "timeout" as const;
-export const NT_VIEW = "view" as const;
+export const NT_AGGREGATE = "aggregate";
+export const NT_COMMAND = "command";
+export const NT_EVENT = "event";
+export const NT_INTEGRATION = "integration";
+export const NT_ISSUE = "issue";
+export const NT_PROCESS = "process";
+export const NT_PROJECTION = "projection";
+export const NT_TIMEOUT = "timeout";
+export const NT_VIEW = "view";
 
 export type NodeType =
   | typeof NT_AGGREGATE

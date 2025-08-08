@@ -41,6 +41,7 @@ export default function Selectable(props: SelectableProps) {
       {/* {isSelected && (
         <div className={styles.selectableOptions}>
           <button type="button">Remove</button>
+          <button type="button">Export</button>
         </div>
       )} */}
     </div>

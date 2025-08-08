@@ -6,7 +6,13 @@ import {
   type IOGroupPath,
   type OperatorGroupPath,
 } from "../types.ts";
-import { useCurrentDomain, useDomainName, useDomainNodeDef } from "../hooks.ts";
+import {
+  useCurrentDomain,
+  useDomainName,
+  useDomainNodeDef,
+  useExportNodeDef,
+  useIsSelected,
+} from "../hooks.ts";
 import { packDnDNodeInst } from "../util.ts";
 import Draggable from "./Draggable.tsx";
 import Selectable from "./Selectable.tsx";
@@ -23,6 +29,8 @@ export default function NodeCard(props: NodeCardProps) {
   const currentDomain = useCurrentDomain();
   const domainName = useDomainName(domainId);
   const subTitle = currentDomain.name === domainName ? undefined : domainName;
+  const isSelected = useIsSelected(id);
+  const handleExport = useExportNodeDef(nodeInst);
 
   const handleDragStart = useCallback(
     (e: DragEvent) => {
@@ -43,6 +51,15 @@ export default function NodeCard(props: NodeCardProps) {
     <Draggable onDragStart={handleDragStart}>
       <Selectable id={id}>
         <Card type={type} title={name} subTitle={subTitle} comment={comment} />
+
+        {isSelected && (
+          <div>
+            {/* <button type="button">Remove</button> */}
+            <button type="button" onClick={handleExport}>
+              Export
+            </button>
+          </div>
+        )}
       </Selectable>
     </Draggable>
   );
