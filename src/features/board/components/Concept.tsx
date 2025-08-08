@@ -1,7 +1,12 @@
 import { useCallback, useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
-import { DDF_CONCEPT, type Concept, type TimelinePath } from "../types.ts";
+import {
+  DDF_CONCEPT,
+  type Concept,
+  type Id,
+  type TimelinePath,
+} from "../types.ts";
 import styles from "../Board.module.css";
 import { useConceptPath } from "../path-hooks.ts";
 import { packDnDConcept } from "../util.ts";
@@ -11,11 +16,13 @@ import TimePoint from "./TimePoint.tsx";
 import Selectable from "./Selectable.tsx";
 
 export interface ConceptProps {
-  path: TimelinePath;
+  path: TimelinePath; // TODO(KM): Try remove
+  timelineId: Id;
   concept: Concept;
 }
 
 export default function Concept(props: ConceptProps) {
+  const { timelineId } = props;
   const { id, name, comment, timePoints } = props.concept;
   const timelinePath = props.path;
   const path = useConceptPath(timelinePath, id);
@@ -25,11 +32,18 @@ export default function Concept(props: ConceptProps) {
     (e: DragEvent) => {
       if (e.dataTransfer) {
         e.stopPropagation();
-        e.dataTransfer.setData(DDF_CONCEPT, packDnDConcept(timelinePath, id));
+        // e.dataTransfer.setData(DDF_CONCEPT, packDnDConcept(timelinePath, id));
+        e.dataTransfer.setData(
+          DDF_CONCEPT,
+          // TODO(KM): Also flatten and remove path?
+          // packDnDConcept(timelinePath.timelineId, id)
+          packDnDConcept(timelineId, id)
+        );
         e.dataTransfer.effectAllowed = "move";
       }
     },
-    [id, timelinePath]
+    // [id, timelinePath]
+    [id, timelineId]
   );
 
   const handleVisibleToggle = (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -43,6 +57,7 @@ export default function Concept(props: ConceptProps) {
       <Selectable id={id}>
         <div draggable className={styles.concept}>
           <div className={styles.header}>
+            <p>DEBUG(KM): Concept {id}</p>
             <h2>{name}</h2>
             <div className={styles.headerComment}>{comment}</div>
 

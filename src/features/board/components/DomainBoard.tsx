@@ -30,7 +30,8 @@ export default function DomainBoard(props: DomainBoardProps) {
 
         {timelines.map((timeline) => (
           <Fragment key={timeline.id}>
-            <Timeline path={path} timeline={timeline} />
+            {/* <Timeline path={path} timeline={timeline} /> */}
+            <Timeline path={path} domainId={id} timeline={timeline} />
 
             <TimelineDropArea domainId={id} afterId={timeline.id} />
           </Fragment>

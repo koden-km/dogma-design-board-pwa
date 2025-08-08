@@ -37,7 +37,7 @@ export const useIsSelected = (id: Id) => useSelector().selectedId === id;
 export const useSelectedId = () => useSelector().selectedId;
 
 export const useDomainNodeDef = (domainId: Id, defId: Id) =>
-  useSelector().domains[domainId].nodesDefinitions[defId];
+  useSelector().domains[domainId].nodeDefinitions[defId];
 
 export const useIsCurrentDomain = (domainId: Id) =>
   useSelector().currentDomainId === domainId;

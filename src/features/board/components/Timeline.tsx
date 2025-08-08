@@ -1,21 +1,30 @@
 import { useCallback, useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import FlexLayout from "@/components/FlexLayout.tsx";
-import { type Timeline, type DomainPath, DDF_TIMELINE } from "../types.ts";
+import {
+  type Timeline,
+  type DomainPath,
+  DDF_TIMELINE,
+  type Id,
+} from "../types.ts";
+import { packDnDTimeline } from "../util.ts";
 import styles from "../Board.module.css";
 import ConceptDropArea from "./drop-area/ConceptDropArea.tsx";
 import { useTimelinePath } from "../path-hooks.ts";
 import Concept from "./Concept.tsx";
 import Selectable from "./Selectable.tsx";
-import { packDnDTimeline } from "../util.ts";
 import Draggable from "./Draggable.tsx";
 
 export interface TimelineProps {
-  path: DomainPath;
+  path: DomainPath; // TODO(KM): Try Delete
+  domainId: Id;
   timeline: Timeline;
 }
 
 export default function Timeline(props: TimelineProps) {
+  // const {domainId, timeline} = props
+  const { domainId } = props;
+  // const { id, concepts } = props.timeline;
   const { id, concepts } = props.timeline;
   const domainPath = props.path;
   const path = useTimelinePath(domainPath, id);
@@ -25,11 +34,18 @@ export default function Timeline(props: TimelineProps) {
     (e: DragEvent) => {
       if (e.dataTransfer) {
         e.stopPropagation();
-        e.dataTransfer.setData(DDF_TIMELINE, packDnDTimeline(domainPath, id));
+        // e.dataTransfer.setData(DDF_TIMELINE, packDnDTimeline(domainPath, id));
+        e.dataTransfer.setData(
+          DDF_TIMELINE,
+          // TODO(KM): Also flatten and remove path?
+          // packDnDTimeline(domainPath.domainId, id)
+          packDnDTimeline(domainId, id)
+        );
         e.dataTransfer.effectAllowed = "move";
       }
     },
-    [domainPath, id]
+    // [domainPath, id]
+    [domainId, id]
   );
 
   const handleVisibleToggle = (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -43,6 +59,7 @@ export default function Timeline(props: TimelineProps) {
       <Selectable id={id}>
         <FlexLayout isDraggable isVertical className={styles.timeline}>
           <div className={styles.header}>
+            <p>DEBUG(KM): Timeline {id}</p>
             <FlexLayout isHorizontal>
               <button type="button" onClick={handleVisibleToggle}>
                 {isVisible ? "Hide Timeline" : "Show Timeline"}
@@ -62,7 +79,7 @@ export default function Timeline(props: TimelineProps) {
 
               {concepts.map((concept) => (
                 <Fragment key={concept.id}>
-                  <Concept path={path} concept={concept} />
+                  <Concept path={path} timelineId={id} concept={concept} />
 
                   <ConceptDropArea path={path} afterId={concept.id} />
                 </Fragment>

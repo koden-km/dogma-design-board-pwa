@@ -24,8 +24,12 @@ export default function TimelineDropArea(props: TimelineDropAreaProps) {
     (payload: DragPayload) => {
       const source = payload as DragTimelinePayload;
 
+      // const target: DropTimelinePayload = {
+      //   path: { domainId },
+      //   afterId,
+      // };
       const target: DropTimelinePayload = {
-        path: { domainId },
+        domainId,
         afterId,
       };
 

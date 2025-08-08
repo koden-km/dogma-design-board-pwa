@@ -25,8 +25,13 @@ export default function ConceptDropArea(props: ConceptDropAreaProps) {
     (payload: DragPayload) => {
       const source = payload as DragConceptPayload;
 
+      // const target: DropConceptPayload = {
+      //   path,
+      //   afterId,
+      // };
+      // TODO(KM): Also flatten and remove path?
       const target: DropConceptPayload = {
-        path,
+        timelineId: path.timelineId,
         afterId,
       };
 

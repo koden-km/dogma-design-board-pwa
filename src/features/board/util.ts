@@ -13,7 +13,6 @@ import {
   type IssueComment,
   type IssueThread,
   type NodeDef,
-  type NodeDefMap,
   type IOGroup,
   type OperatorGroupPath,
   type NodeInst,
@@ -24,13 +23,81 @@ import {
   type TimePoint,
   type ConceptPath,
   type Timeline,
-  type DomainPath,
+  // type DomainPath,
+  type ObjectIdMap,
+  type IdIndexMaps,
 } from "./types.ts";
+
+export function insertAfterId<T extends { id: Id }>(
+  items: T[],
+  afterId: Id | undefined,
+  item: T
+) {
+  const afterIndex = items.findIndex(({ id }) => id === afterId);
+  if (afterIndex === -1) {
+    items.splice(0, 0, item);
+  } else {
+    items.splice(afterIndex + 1, 0, item);
+  }
+}
+
+export function removeWithId<T extends { id: Id }>(
+  items: T[],
+  removeId: Id
+): T[] {
+  return items.filter(({ id }) => id !== removeId);
+}
+
+export function buildIdIndexMaps(idIndex: IdIndexMaps, domains: Domain[]) {
+  domains.forEach((domain) => {
+    Object.values(domain.nodeDefinitions).forEach((nodeDef) => {
+      idIndex.nodeDefinitions[nodeDef.id] = nodeDef;
+    });
+    domain.timelines.forEach((timeline) => {
+      idIndex.timelines[timeline.id] = timeline;
+      timeline.concepts.forEach((concept) => {
+        idIndex.concepts[concept.id] = concept;
+        concept.timePoints.forEach((timePoint) => {
+          idIndex.timePoints[timePoint.id] = timePoint;
+          timePoint.operatorGroups.forEach((opGroup) => {
+            idIndex.operatorGroups[opGroup.id] = opGroup;
+            const opNode = opGroup.operatorNode;
+            if (opNode) {
+              idIndex.nodeInstances[opNode.id] = opNode;
+            }
+            opGroup.ioGroups.forEach((ioGroup) => {
+              idIndex.ioGroups[ioGroup.id] = ioGroup;
+              const ioInput = ioGroup.input;
+              if (ioInput) {
+                idIndex.nodeInstances[ioInput.id] = ioInput;
+              }
+              ioGroup.outputs.forEach((ioOutput) => {
+                idIndex.nodeInstances[ioOutput.id] = ioOutput;
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+}
+
+export function createIdIndexMaps(): IdIndexMaps {
+  return {
+    timelines: {},
+    concepts: {},
+    timePoints: {},
+    operatorGroups: {},
+    ioGroups: {},
+    nodeDefinitions: {},
+    nodeInstances: {},
+  };
+}
 
 export function createDomain(
   id: Id,
   name: string,
-  nodesDefinitions: NodeDefMap = {}
+  nodeDefinitions: ObjectIdMap<NodeDef> = {}
 ): Domain {
   return {
     id,
@@ -38,7 +105,7 @@ export function createDomain(
     comment: "",
     issueThreads: {},
     timelines: [createTimeline()], // create a default timeline
-    nodesDefinitions,
+    nodeDefinitions,
   };
 }
 
@@ -179,12 +246,18 @@ export function packDnDTimePoint(path: ConceptPath, timePointId: Id): string {
   return JSON.stringify({ path, timePointId });
 }
 
-export function packDnDConcept(path: TimelinePath, conceptId: Id): string {
-  return JSON.stringify({ path, conceptId });
+// export function packDnDConcept(path: TimelinePath, conceptId: Id): string {
+//   return JSON.stringify({ path, conceptId });
+// }
+export function packDnDConcept(timelineId: Id, conceptId: Id): string {
+  return JSON.stringify({ timelineId, conceptId });
 }
 
-export function packDnDTimeline(path: DomainPath, timelineId: Id): string {
-  return JSON.stringify({ path, timelineId });
+// export function packDnDTimeline(path: DomainPath, timelineId: Id): string {
+//   return JSON.stringify({ path, timelineId });
+// }
+export function packDnDTimeline(domainId: Id, timelineId: Id): string {
+  return JSON.stringify({ domainId, timelineId });
 }
 
 export function unpackDnDNodeInst(jsonData: string): DragNodeInstPayload {

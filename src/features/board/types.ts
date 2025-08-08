@@ -1,4 +1,15 @@
 export type Id = string;
+export type ObjectIdMap<T> = { [key: Id]: T };
+
+export type IdIndexMaps = {
+  timelines: ObjectIdMap<Timeline>;
+  concepts: ObjectIdMap<Concept>;
+  timePoints: ObjectIdMap<TimePoint>;
+  operatorGroups: ObjectIdMap<OperatorGroup>;
+  ioGroups: ObjectIdMap<IOGroup>;
+  nodeDefinitions: ObjectIdMap<NodeDef>;
+  nodeInstances: ObjectIdMap<NodeInst>;
+};
 
 export type Domain = {
   id: Id;
@@ -6,12 +17,7 @@ export type Domain = {
   comment: string;
   issueThreads: { [key: Id]: IssueThread };
   timelines: Timeline[]; // a list of concurrent timelines to model things occurring at similar but unrelated time points
-  nodesDefinitions: NodeDefMap;
-};
-
-// a key-value plain object map, eg. map<Id,NodeDef>
-export type NodeDefMap = {
-  [key: Id]: NodeDef;
+  nodeDefinitions: ObjectIdMap<NodeDef>;
 };
 
 export type IssueThread = {
@@ -159,7 +165,6 @@ export type IOGroupPath = {
 export type DragNodeInstPayload = {
   path: IOGroupPath;
   nodeInstId: Id;
-  // nodeDefId: Id; // don't really need this?
   nodeType: NodeType;
 };
 
@@ -178,13 +183,21 @@ export type DragTimePointPayload = {
   timePointId: Id;
 };
 
+// export type DragConceptPayload = {
+//   path: TimelinePath;
+//   conceptId: Id;
+// };
 export type DragConceptPayload = {
-  path: TimelinePath;
+  timelineId: Id;
   conceptId: Id;
 };
 
+// export type DragTimelinePayload = {
+//   path: DomainPath;
+//   timelineId: Id;
+// };
 export type DragTimelinePayload = {
-  path: DomainPath;
+  domainId: Id;
   timelineId: Id;
 };
 
@@ -229,13 +242,21 @@ export type DropTimePointPayload = {
   afterId: Id | undefined;
 };
 
+// export type DropConceptPayload = {
+//   path: TimelinePath;
+//   afterId: Id | undefined;
+// };
 export type DropConceptPayload = {
-  path: TimelinePath;
+  timelineId: Id;
   afterId: Id | undefined;
 };
 
+// export type DropTimelinePayload = {
+//   path: DomainPath;
+//   afterId: Id | undefined;
+// };
 export type DropTimelinePayload = {
-  path: DomainPath;
+  domainId: Id;
   afterId: Id | undefined;
 };
 
