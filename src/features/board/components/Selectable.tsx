@@ -26,6 +26,8 @@ export default function Selectable(props: SelectableProps) {
 
   return (
     <div>
+      <span id={id} />
+
       <div
         role="button"
         className={classnames(styles.selectable, {
