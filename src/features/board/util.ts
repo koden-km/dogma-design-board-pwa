@@ -27,6 +27,26 @@ import {
   type ObjectIdMap,
 } from "./types.ts";
 
+export function insertAfterId<T extends { id: Id }>(
+  items: T[],
+  afterId: Id | undefined,
+  item: T
+) {
+  const afterIndex = items.findIndex(({ id }) => id === afterId);
+  if (afterIndex === -1) {
+    items.splice(0, 0, item);
+  } else {
+    items.splice(afterIndex + 1, 0, item);
+  }
+}
+
+export function removeWithId<T extends { id: Id }>(
+  items: T[],
+  removeId: Id
+): T[] {
+  return items.filter(({ id }) => id !== removeId);
+}
+
 export function createDomain(
   id: Id,
   name: string,

@@ -155,7 +155,6 @@ export type IOGroupPath = {
 export type DragNodeInstPayload = {
   path: IOGroupPath;
   nodeInstId: Id;
-  // nodeDefId: Id; // don't really need this?
   nodeType: NodeType;
 };
 
