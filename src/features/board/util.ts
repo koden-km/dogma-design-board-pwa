@@ -13,7 +13,6 @@ import {
   type IssueComment,
   type IssueThread,
   type NodeDef,
-  type NodeDefMap,
   type IOGroup,
   type OperatorGroupPath,
   type NodeInst,
@@ -25,12 +24,13 @@ import {
   type ConceptPath,
   type Timeline,
   type DomainPath,
+  type ObjectIdMap,
 } from "./types.ts";
 
 export function createDomain(
   id: Id,
   name: string,
-  nodesDefinitions: NodeDefMap = {}
+  nodeDefinitions: ObjectIdMap<NodeDef> = {}
 ): Domain {
   return {
     id,
@@ -38,7 +38,7 @@ export function createDomain(
     comment: "",
     issueThreads: {},
     timelines: [createTimeline()], // create a default timeline
-    nodesDefinitions,
+    nodeDefinitions,
   };
 }
 

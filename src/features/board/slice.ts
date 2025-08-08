@@ -36,6 +36,7 @@ import {
   type DropConceptPayload,
   type DragTimelinePayload,
   type DropTimelinePayload,
+  type ObjectIdMap,
 } from "./types.ts";
 import {
   createConcept,
@@ -51,7 +52,7 @@ import {
 export interface BoardState {
   currentDomainId: Id;
   currentTool: ToolType;
-  domains: { [key: Id]: Domain };
+  domains: ObjectIdMap<Domain>;
   selectedId: Id;
 }
 
@@ -148,20 +149,20 @@ const someTimeout1 = createNodeDef(
   NT_TIMEOUT,
   "Some Timeout 1"
 );
-defaultDomain.nodesDefinitions[someAggregate1.id] = someAggregate1;
-defaultDomain.nodesDefinitions[someProcess1.id] = someProcess1;
-defaultDomain.nodesDefinitions[someProcess2.id] = someProcess2;
-defaultDomain.nodesDefinitions[someView1.id] = someView1;
-defaultDomain.nodesDefinitions[someCommand1.id] = someCommand1;
-defaultDomain.nodesDefinitions[someCommand2.id] = someCommand2;
-defaultDomain.nodesDefinitions[someCommand3.id] = someCommand3;
-defaultDomain.nodesDefinitions[someCommand4.id] = someCommand4;
-defaultDomain.nodesDefinitions[someEvent1.id] = someEvent1;
-defaultDomain.nodesDefinitions[someEvent2.id] = someEvent2;
-defaultDomain.nodesDefinitions[someEvent3.id] = someEvent3;
-defaultDomain.nodesDefinitions[someEvent4.id] = someEvent4;
-defaultDomain.nodesDefinitions[someEvent5.id] = someEvent5;
-defaultDomain.nodesDefinitions[someTimeout1.id] = someTimeout1;
+defaultDomain.nodeDefinitions[someAggregate1.id] = someAggregate1;
+defaultDomain.nodeDefinitions[someProcess1.id] = someProcess1;
+defaultDomain.nodeDefinitions[someProcess2.id] = someProcess2;
+defaultDomain.nodeDefinitions[someView1.id] = someView1;
+defaultDomain.nodeDefinitions[someCommand1.id] = someCommand1;
+defaultDomain.nodeDefinitions[someCommand2.id] = someCommand2;
+defaultDomain.nodeDefinitions[someCommand3.id] = someCommand3;
+defaultDomain.nodeDefinitions[someCommand4.id] = someCommand4;
+defaultDomain.nodeDefinitions[someEvent1.id] = someEvent1;
+defaultDomain.nodeDefinitions[someEvent2.id] = someEvent2;
+defaultDomain.nodeDefinitions[someEvent3.id] = someEvent3;
+defaultDomain.nodeDefinitions[someEvent4.id] = someEvent4;
+defaultDomain.nodeDefinitions[someEvent5.id] = someEvent5;
+defaultDomain.nodeDefinitions[someTimeout1.id] = someTimeout1;
 // defaultDomain.timelines = []; // clear the initial placeholder?
 defaultDomain.timelines.push(
   createTimeline(uuidv4(), [

@@ -1,17 +1,13 @@
 export type Id = string;
+export type ObjectIdMap<T> = { [key: Id]: T };
 
 export type Domain = {
   id: Id;
   name: string;
   comment: string;
-  issueThreads: { [key: Id]: IssueThread };
+  issueThreads: ObjectIdMap<IssueThread>;
   timelines: Timeline[]; // a list of concurrent timelines to model things occurring at similar but unrelated time points
-  nodesDefinitions: NodeDefMap;
-};
-
-// a key-value plain object map, eg. map<Id,NodeDef>
-export type NodeDefMap = {
-  [key: Id]: NodeDef;
+  nodeDefinitions: ObjectIdMap<NodeDef>;
 };
 
 export type IssueThread = {
