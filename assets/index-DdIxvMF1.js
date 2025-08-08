@@ -64,10 +64,9 @@ import (
 	"time"
 
 	"github.com/dogmatiq/dogma"
-	"github.com/dogmatiq/example/messages"
+	//"github.com/example-org/example-service/messages"
 )
-`}function N1(i){const c=j1(i.name);return`
-// ${c} ${i.type} message.
+`}function N1(i){const c=j1(i.name);return`// ${c} ${i.type} message.
 type ${c} struct {}
 
 // MessageDescription returns a human-readable description of the message.
@@ -83,8 +82,7 @@ func (m ${c}) Validate(dogma.${q1(i)}) error {
 package ${i};
 
 //option go_package = "github.com/example-org/example-service/messages";
-`}function U1(i){const c=G1(i.name);return`
-// ${c} ${i.type} message.
+`}function U1(i){const c=G1(i.name);return`// ${c} ${i.type} message.
 message ${c} {}
 `}function C1(i){return i.toLowerCase().replaceAll(/[^a-z]/g,"")}function j1(i){return i.replaceAll(/[^a-zA-Z0-9]/g,"")}function H1(i){return i.toLowerCase().replaceAll(/[^a-z]/g,"")}function G1(i){return i.replaceAll(/[^a-zA-Z0-9]/g,"")}function q1(i){switch(i.type){case In:return"CommandValidationScope";case an:return"EventValidationScope";case Qr:return"TimeoutValidationScope"}return"UnknownValidationScope"}const B1=i=>Rl().domains[i].name,Y1=i=>Rl().domains[i],Jh=i=>Rl().selectedId===i,kh=(i,c)=>Rl().domains[i].nodeDefinitions[c],X1=i=>Rl().currentDomainId===i,Q1=i=>Rl().currentTool===i,Wh=()=>{const{currentDomainId:i,domains:c}=Rl();return c[i]},V1=()=>{const i=Rl().domains;return Y.useMemo(()=>Object.values(i),[i])},Z1=i=>{const c=Y1(i.domainId),o=kh(i.domainId,i.defId);return Y.useCallback(f=>{if(f.preventDefault(),f.stopPropagation(),!o){console.warn("No Node Def not found.");return}dh(O1(o.name),z1(c,o)),dh(A1(o.name),M1(c,o))},[o])},Jr=()=>{const i=nl();return Y.useCallback((c,o)=>{i(h1({source:c,target:o}))},[i])},L1=()=>{const i=nl();return Y.useCallback((c,o)=>{i(m1({source:c,target:o}))},[i])},w1=()=>{const i=nl();return Y.useCallback((c,o)=>{i(y1({source:c,target:o}))},[i])},K1=()=>{const i=nl();return Y.useCallback((c,o)=>{i(v1({source:c,target:o}))},[i])},J1=()=>{const i=nl();return Y.useCallback((c,o)=>{i(d1({source:c,target:o}))},[i])},k1=()=>{const i=nl();return Y.useCallback((c,o)=>{i(g1({source:c,target:o}))},[i])},mh=i=>{const c=nl();return Y.useCallback(()=>{c(p1({id:i}))},[i,c])},W1=i=>{const c=nl();return Y.useCallback(()=>{c(S1({domainId:i}))},[i,c])},$1=i=>{const c=nl();return Y.useCallback(()=>{c(b1({tool:i}))},[i,c])};function Rl(){return I0(i=>i[Bi.name])}const F1="_domainList_14ptd_1",I1="_domainButton_14ptd_10",P1="_isDomain_14ptd_20",tp="_currentDomain_14ptd_24",ua={domainList:F1,domainButton:I1,isDomain:P1,currentDomain:tp};var Sr={exports:{}};/*!
 	Copyright (c) 2018 Jed Watson.
