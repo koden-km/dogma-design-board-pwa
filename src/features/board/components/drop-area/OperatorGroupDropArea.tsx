@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_OP_GROUP,
@@ -10,7 +11,7 @@ import {
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
-import { useMoveOperatorGroup } from "../../hooks.ts";
+import { useAddOperatorGroup, useMoveOperatorGroup } from "../../hooks.ts";
 
 export interface OperatorGroupDropAreaProps {
   path: TimePointPath;
@@ -22,6 +23,7 @@ export default function OperatorGroupDropArea(
 ) {
   const { path, afterId } = props;
   const moveOperatorGroup = useMoveOperatorGroup();
+  const addOperatorGroup = useAddOperatorGroup();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
@@ -41,10 +43,7 @@ export default function OperatorGroupDropArea(
     (e: React.PointerEvent<HTMLButtonElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log(
-        `TODO: Add new time point operator group! afterId=${afterId} path=`,
-        path
-      );
+      addOperatorGroup(path, afterId, uuidv4());
     },
     [afterId, path]
   );

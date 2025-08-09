@@ -100,12 +100,7 @@ export function createTimeline(
       createConcept(
         uuidv4(),
         "New Event Storm",
-        "Start by adding the business domain events to the board in a rough time order. They can be moved around as needed.",
-        [
-          createTimePoint(uuidv4(), [
-            createOperatorGroup(uuidv4(), undefined, [createIOGroup(uuidv4())]),
-          ]),
-        ]
+        "Start by adding the business domain events to the board in a rough time order. They can be moved around as needed."
       )
     );
   }
@@ -120,6 +115,9 @@ export function createConcept(
   comment: string = "",
   timePoints: TimePoint[] = []
 ): Concept {
+  if (timePoints.length === 0) {
+    timePoints.push(createTimePoint(uuidv4()));
+  }
   return { id, name, comment, timePoints };
 }
 
@@ -128,7 +126,23 @@ export function createTimePoint(
   id: Id = uuidv4(),
   operatorGroups: OperatorGroup[] = []
 ): TimePoint {
+  if (operatorGroups.length === 0) {
+    operatorGroups.push(createOperatorGroup(uuidv4()));
+  }
+
   return { id, operatorGroups };
+}
+
+export function createOperatorGroup(
+  id: Id = uuidv4(),
+  operatorNode?: NodeInst,
+  ioGroups: IOGroup[] = []
+): OperatorGroup {
+  if (ioGroups.length === 0) {
+    ioGroups.push(createIOGroup(uuidv4()));
+  }
+
+  return { id, operatorNode, ioGroups };
 }
 
 export function createIOGroup(
@@ -137,14 +151,6 @@ export function createIOGroup(
   outputs: NodeInst[] = []
 ): IOGroup {
   return { id, input, outputs };
-}
-
-export function createOperatorGroup(
-  id: Id = uuidv4(),
-  operatorNode?: NodeInst,
-  ioGroups: IOGroup[] = []
-): OperatorGroup {
-  return { id, operatorNode, ioGroups };
 }
 
 // node definition

@@ -1,7 +1,14 @@
 import { useCallback, useMemo } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useAppSelector, useAppDispatch } from "@/store/hooks.js";
 import { type ToolType } from "@/features/toolbar/types.ts";
 import slice, {
+  addConcept,
+  addDomain,
+  addIOGroup,
+  addOperatorGroup,
+  addTimeline,
+  addTimePoint,
   moveConcept,
   moveIOGroup,
   moveNodeInst,
@@ -14,6 +21,7 @@ import slice, {
   type BoardState,
 } from "./slice.ts";
 import type {
+  ConceptPath,
   DragConceptPayload,
   DragIOGroupPayload,
   DragNodeInstPayload,
@@ -28,6 +36,9 @@ import type {
   DropTimePointPayload,
   Id,
   NodeInst,
+  OperatorGroupPath,
+  TimelinePath,
+  TimePointPath,
 } from "./types.ts";
 import {
   downloadFile,
@@ -88,6 +99,72 @@ export const useExportNodeDef = (nodeInst: NodeInst) => {
       );
     },
     [nodeDef]
+  );
+};
+
+export const useAddDomain = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (id: Id, name: string) => {
+      dispatch(addDomain({ id, name }));
+    },
+    [dispatch]
+  );
+};
+
+export const useAddTimeline = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (domainId: Id, afterId: Id | undefined, id: Id) => {
+      dispatch(addTimeline({ domainId, afterId, id }));
+    },
+    [dispatch]
+  );
+};
+
+export const useAddConcept = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (
+      path: TimelinePath,
+      afterId: Id | undefined,
+      id: Id,
+      name: string,
+      comment?: string
+    ) => {
+      dispatch(addConcept({ path, afterId, id, name, comment }));
+    },
+    [dispatch]
+  );
+};
+
+export const useAddTimePoint = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (path: ConceptPath, afterId: Id | undefined, id: Id) => {
+      dispatch(addTimePoint({ path, afterId, id }));
+    },
+    [dispatch]
+  );
+};
+
+export const useAddOperatorGroup = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (path: TimePointPath, afterId: Id | undefined, id: Id) => {
+      dispatch(addOperatorGroup({ path, afterId, id }));
+    },
+    [dispatch]
+  );
+};
+
+export const useAddIOGroup = () => {
+  const dispatch = useAppDispatch();
+  return useCallback(
+    (path: OperatorGroupPath, afterId: Id | undefined, id: Id) => {
+      dispatch(addIOGroup({ path, afterId, id }));
+    },
+    [dispatch]
   );
 };
 

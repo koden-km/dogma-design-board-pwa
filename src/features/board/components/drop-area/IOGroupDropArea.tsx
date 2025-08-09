@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_IO_GROUP,
@@ -10,7 +11,7 @@ import {
 } from "../../types.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
-import { useMoveIOGroup } from "../../hooks.ts";
+import { useAddIOGroup, useMoveIOGroup } from "../../hooks.ts";
 
 export interface IOGroupDropAreaProps {
   path: OperatorGroupPath;
@@ -20,6 +21,7 @@ export interface IOGroupDropAreaProps {
 export default function IOGroupDropArea(props: IOGroupDropAreaProps) {
   const { path, afterId } = props;
   const moveIOGroup = useMoveIOGroup();
+  const addIOGroup = useAddIOGroup();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
@@ -39,7 +41,7 @@ export default function IOGroupDropArea(props: IOGroupDropAreaProps) {
     (e: React.PointerEvent<HTMLButtonElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log(`TODO: Add new io group afterId=${afterId}! path=`, path);
+      addIOGroup(path, afterId, uuidv4());
     },
     [path, afterId]
   );

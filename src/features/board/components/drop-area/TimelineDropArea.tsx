@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_TIMELINE,
@@ -9,7 +10,7 @@ import {
 } from "../../types.ts";
 import AddButton from "./AddButton.tsx";
 import DropArea from "./DropArea.tsx";
-import { useMoveTimeline } from "../../hooks.ts";
+import { useAddTimeline, useMoveTimeline } from "../../hooks.ts";
 
 export interface TimelineDropAreaProps {
   domainId: Id;
@@ -19,6 +20,7 @@ export interface TimelineDropAreaProps {
 export default function TimelineDropArea(props: TimelineDropAreaProps) {
   const { domainId, afterId } = props;
   const moveTimeline = useMoveTimeline();
+  const addTimeline = useAddTimeline();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
@@ -37,7 +39,7 @@ export default function TimelineDropArea(props: TimelineDropAreaProps) {
   const addHandler = useCallback((e: React.PointerEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("TODO: Add timeline!");
+    addTimeline(domainId, afterId, uuidv4());
   }, []);
 
   return (

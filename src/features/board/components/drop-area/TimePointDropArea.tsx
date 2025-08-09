@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_TIME_POINT,
@@ -8,7 +9,7 @@ import {
   type DropTimePointPayload,
   type Id,
 } from "../../types.ts";
-import { useMoveTimePoint } from "../../hooks.ts";
+import { useAddTimePoint, useMoveTimePoint } from "../../hooks.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 
@@ -20,6 +21,7 @@ export interface TimePointDropAreaProps {
 export default function TimePointDropArea(props: TimePointDropAreaProps) {
   const { path, afterId } = props;
   const moveTimePoint = useMoveTimePoint();
+  const addTimePoint = useAddTimePoint();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
@@ -39,7 +41,7 @@ export default function TimePointDropArea(props: TimePointDropAreaProps) {
     (e: React.PointerEvent<HTMLButtonElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log(`TODO: Add new time point! afterId=${afterId} path=`, path);
+      addTimePoint(path, afterId, uuidv4());
     },
     [afterId, path]
   );

@@ -387,12 +387,93 @@ const slice = createSlice({
     addDomain: (
       state,
       action: PayloadAction<{
-        id?: Id;
+        id: Id;
         name: string;
       }>
     ) => {
-      const { id = uuidv4(), name } = action.payload;
+      const { id, name } = action.payload;
       state.domains[id] = createDomain(id, name);
+    },
+
+    addTimeline: (
+      state,
+      action: PayloadAction<{
+        domainId: Id;
+        afterId: Id | undefined;
+        id: Id;
+      }>
+    ) => {
+      const { domainId, id, afterId } = action.payload;
+      const timeline = createTimeline(id);
+      insertAfterId(state.domains[domainId].timelines, afterId, timeline);
+    },
+
+    addConcept: (
+      state,
+      action: PayloadAction<{
+        path: TimelinePath;
+        afterId: Id | undefined;
+        id: Id;
+        name: string;
+        comment?: string;
+      }>
+    ) => {
+      const { path, afterId, id, name, comment } = action.payload;
+      const timeline = getTimelineFromPath(state.domains[path.domainId], path);
+      if (!timeline) return;
+      const concept = createConcept(id, name, comment);
+      insertAfterId(timeline.concepts, afterId, concept);
+    },
+
+    addTimePoint: (
+      state,
+      action: PayloadAction<{
+        path: ConceptPath;
+        afterId: Id | undefined;
+        id: Id;
+      }>
+    ) => {
+      const { path, afterId, id } = action.payload;
+      const concept = getConceptFromPath(state.domains[path.domainId], path);
+      if (!concept) return;
+      const timePoint = createTimePoint(id);
+      insertAfterId(concept.timePoints, afterId, timePoint);
+    },
+
+    addOperatorGroup: (
+      state,
+      action: PayloadAction<{
+        path: TimePointPath;
+        afterId: Id | undefined;
+        id: Id;
+      }>
+    ) => {
+      const { path, afterId, id } = action.payload;
+      const timePoint = getTimePointFromPath(
+        state.domains[path.domainId],
+        path
+      );
+      if (!timePoint) return;
+      const opGroup = createOperatorGroup(id);
+      insertAfterId(timePoint.operatorGroups, afterId, opGroup);
+    },
+
+    addIOGroup: (
+      state,
+      action: PayloadAction<{
+        path: OperatorGroupPath;
+        afterId: Id | undefined;
+        id: Id;
+      }>
+    ) => {
+      const { path, afterId, id } = action.payload;
+      const opGroup = getOperatorGroupFromPath(
+        state.domains[path.domainId],
+        path
+      );
+      if (!opGroup) return;
+      const ioGroup = createIOGroup(id);
+      insertAfterId(opGroup.ioGroups, afterId, ioGroup);
     },
 
     // import a single domain
@@ -647,6 +728,12 @@ const slice = createSlice({
 });
 
 export const {
+  addDomain,
+  addTimeline,
+  addConcept,
+  addTimePoint,
+  addOperatorGroup,
+  addIOGroup,
   moveConcept,
   moveIOGroup,
   moveNodeInst,

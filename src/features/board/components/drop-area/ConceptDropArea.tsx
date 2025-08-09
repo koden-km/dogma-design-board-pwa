@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { v4 as uuidv4 } from "uuid";
 import NoWrap from "@/components/NoWrap.tsx";
 import {
   DDF_CONCEPT,
@@ -8,7 +9,7 @@ import {
   type Id,
   type TimelinePath,
 } from "../../types.ts";
-import { useMoveConcept } from "../../hooks.ts";
+import { useAddConcept, useMoveConcept } from "../../hooks.ts";
 import DropArea from "./DropArea.tsx";
 import AddButton from "./AddButton.tsx";
 
@@ -20,6 +21,7 @@ export interface ConceptDropAreaProps {
 export default function ConceptDropArea(props: ConceptDropAreaProps) {
   const { path, afterId } = props;
   const moveConcept = useMoveConcept();
+  const addConcept = useAddConcept();
 
   const dropHandler = useCallback(
     (payload: DragPayload) => {
@@ -39,7 +41,8 @@ export default function ConceptDropArea(props: ConceptDropAreaProps) {
     (e: React.PointerEvent<HTMLButtonElement>) => {
       e.preventDefault();
       e.stopPropagation();
-      console.log(`TODO: Add new concept! afterId=${afterId} path=`, path);
+      const id = uuidv4();
+      addConcept(path, afterId, id, `Concept-${id.split("-", 1)[0]}`);
     },
     [afterId, path]
   );
