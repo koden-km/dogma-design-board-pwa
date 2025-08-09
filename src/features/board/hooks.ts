@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { useAppSelector, useAppDispatch } from "@/store/hooks.js";
 import { type ToolType } from "@/features/toolbar/types.ts";
 import slice, {
